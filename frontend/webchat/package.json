@@ -2,6 +2,7 @@
   "name": "webchat",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://127.0.0.1:8000",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -26,7 +27,8 @@
     "react-hot-toast": "^2.4.1",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@types/node": "^20",

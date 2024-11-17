@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     #apps
     'users',
     'rooms',
+    'searching',
     
     #libraries
     'rest_framework',
