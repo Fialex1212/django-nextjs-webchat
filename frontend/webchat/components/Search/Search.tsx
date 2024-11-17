@@ -34,38 +34,42 @@ const Search = () => {
         //TODO add buttons like users, rooms that will be filtered by type
         <div className="users">
           {results.users.length > 0 ? (
-            <h2 className="users__title py-2 text-[30px]">Users</h2>
+            <h2 className="users__title py-2 text-[30px] text-center">Users</h2>
           ) : (
-            <h2 className="users__title py-2 text-[30px]">
+            <h2 className="users__title py-2 text-[30px] text-center">
               No users was found
             </h2>
           )}
-          <ul className="users__list">
+          <ul className="users__list flex flex-col gap-3">
             {results.users.map((user) => (
               <li className="users__item" key={user.id}>
                 <Link href={`/profile/${user.id}`}>
-                  <Card>
-                    <CardContent>{user.username}</CardContent>
+                  <Card className="flex items-center">
+                    <CardContent className="py-4 text-[20px]">
+                      {user.username}
+                    </CardContent>
                   </Card>
                 </Link>
               </li>
             ))}
           </ul>
         </div>
-        <div className="rooms">
+        <div className="rooms ">
           {results.rooms.length > 0 ? (
-            <h2 className="rooms__title py-2 text-[30px]">Rooms</h2>
+            <h2 className="rooms__title py-2 text-[30px] text-center">Rooms</h2>
           ) : (
-            <h2 className="rooms__title py-2 text-[30px]">
+            <h2 className="rooms__title py-2 text-[30px] text-center">
               No rooms was found
             </h2>
           )}
-          <ul className="rooms__list">
+          <ul className="rooms__list  flex flex-col gap-3">
             {results.rooms.map((room) => (
               <li className="rooms__item" key={room.id}>
                 <Link href={`/room/${room.id}`}>
-                  <Card className="flex justify-center items-center">
-                    <CardContent className="text-[20px] flex justify-center items-center">{room.name}</CardContent>{" "}
+                  <Card className="flex items-center">
+                    <CardContent className="py-4 text-[20px]">
+                      {room.name}
+                    </CardContent>{" "}
                   </Card>
                 </Link>
               </li>

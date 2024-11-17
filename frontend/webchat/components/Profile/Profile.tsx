@@ -11,20 +11,25 @@ import { userButtons } from "./utils";
 import { LogOut, Settings } from "lucide-react";
 
 const Profile = () => {
-  const { id, username, email } = useUserData();
-  const { clearToken } = useAuth();
+  const { id, username, email, clearUserData } = useUserData();
+  const { clearToken, token } = useAuth();
   const router = useRouter();
+
+  const logout = () => {
+    clearToken();
+    clearUserData();
+    router.push("/auth/sign-in");
+  };
 
   useEffect(() => {
     const checkToken = async () => {
       await new Promise((resolve) => setTimeout(resolve, 3000));
-      const { token } = useAuth();
       if (!token) {
         router.push("/auth/sign-in");
       }
     };
     checkToken();
-  }, [router]);
+  }, [router, token]);
 
   return (
     <section>
@@ -43,7 +48,7 @@ const Profile = () => {
               </div>
               <button
                 className="absolute bottom-4 right-6"
-                onClick={clearToken}
+                onClick={logout}
               >
                 <LogOut />
               </button>
