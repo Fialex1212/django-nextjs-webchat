@@ -21,19 +21,35 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     async def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        username = text_data_json['username']
+        # Handle invalid JSON or empty message
+        try:
+            # Attempt to parse the incoming JSON data
+            text_data_json = json.loads(text_data)
+            
+            # Extract message and username from the parsed JSON
+            message = text_data_json.get('message', '')
+            username = text_data_json.get('username', '')
 
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'message': message,
-                'username': username
-            }
-        )
+            # If message or username are empty, return early
+            if not message or not username:
+                print(f"Invalid message or username received: {text_data}")
+                return
+
+            # Send message to the group
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'message': message,
+                    'username': username
+                }
+            )
         
+        except json.JSONDecodeError as e:
+            # Log the error if the JSON is invalid
+            print(f"Error decoding JSON: {e} - Received data: {text_data}")
+            return
+
     async def chat_message(self, event):
         message = event['message']
         username = event['username']

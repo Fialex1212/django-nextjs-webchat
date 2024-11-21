@@ -23,7 +23,7 @@ const Profile = () => {
 
   useEffect(() => {
     const checkToken = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      await new Promise((resolve) => setTimeout(resolve, 5000));
       if (!token) {
         router.push("/auth/sign-in");
       }
@@ -53,12 +53,12 @@ const Profile = () => {
                 <LogOut />
               </button>
             </Card>
-            <ul>
+            <ul className="flex flex-col gap-3">
               {userButtons.map((button, index) => (
                 <li key={index}>
                   <Link href={button.link}>
                     <Card className="py-4 px-6 text-[20px] flex items-center gap-4">
-                      <Settings />
+                      {button.icon}
                       {button.name}
                     </Card>
                   </Link>
