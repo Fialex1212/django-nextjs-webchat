@@ -1,7 +1,6 @@
 "use client";
 
 import { useUserData } from "@/contexts/userContext";
-import axios from "axios";
 import { useEffect, useState } from "react";
 
 interface ChatRoomProps {
@@ -47,11 +46,7 @@ const Chat: React.FC<ChatRoomProps> = ({ roomName }) => {
   const handleSendMessage = () => {
     if (message && socket) {
       socket.send(JSON.stringify({ message, username: username || "Guest" }));
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { username: username || "Guest", text: message },
-      ]);
-      setMessage("");
+      setMessage(""); // Clear the input field
     }
   };
 

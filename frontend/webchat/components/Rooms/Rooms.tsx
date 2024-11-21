@@ -64,7 +64,7 @@ const Rooms = () => {
             <CardContent className="p-10">
               <li className="">
                 <div>{room.name}</div>
-                <div>{room.is_private ? "Yes" : "No"}</div>
+                <div>Is Private: {room.is_private ? "Yes" : "No"}</div>
                 <div>
                   Created:{" "}
                   {new Intl.DateTimeFormat("en-US", {
@@ -78,7 +78,7 @@ const Rooms = () => {
                   ))}
                 </ul>
                 <Button>
-                  <Link href={`http://localhost:3000/chat/${room.name}/`}>
+                  <Link href={`http://localhost:3000/room/${room.name}/`}>
                     Connect
                   </Link>
                 </Button>

@@ -5,6 +5,10 @@ import axios from "axios";
 import { useUserData } from "@/contexts/userContext";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/authContext";
+import { get } from "http";
+import { Card, CardContent } from "../ui/card";
+import { Button } from "../ui/button";
+import Link from "next/link";
 
 const MyRooms = () => {
   const [myRooms, setMyRooms] = useState([]);
@@ -36,10 +40,14 @@ const MyRooms = () => {
 
   useEffect(() => {
     getMyRooms();
-    if (token) {
-        router.push("/");
+    const checkToken = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      if (!token) {
+        router.push("/auth/sign-in");
       }
-  }, [id, token, router]);
+    };
+    checkToken();
+  }, [router, token]);
 
   if (loading) {
     return (
@@ -53,14 +61,33 @@ const MyRooms = () => {
     <section>
       <div className="container">
         <h1>My Rooms:</h1>
-        <ul>
+        <ul className="flex flex-col gap-4 h-fit">
           {myRooms.map((room) => (
-            <li key={room.id}>
-              <h1>{room.name}</h1>
-              <p>{room.created_by}</p>
-              <p>{room.created_at}</p>
-              <p>{room.id}</p>
-            </li>
+            <Card key={room.id}>
+              <CardContent className="p-10">
+                <li className="">
+                  <div>{room.name}</div>
+                  <div>Is Private: {room.is_private ? "Yes" : "No"}</div>
+                  <div>
+                    Created:{" "}
+                    {new Intl.DateTimeFormat("en-US", {
+                      dateStyle: "medium",
+                      timeStyle: "short",
+                    }).format(new Date(room.created_at))}
+                  </div>
+                  <ul className="flex gap-4">
+                    {room.allowed_users.map((user) => (
+                      <li key={user.id}>{user.username}</li>
+                    ))}
+                  </ul>
+                  <Button>
+                    <Link href={`http://localhost:3000/room/${room.name}/`}>
+                      Connect
+                    </Link>
+                  </Button>
+                </li>
+              </CardContent>
+            </Card>
           ))}
         </ul>
       </div>
