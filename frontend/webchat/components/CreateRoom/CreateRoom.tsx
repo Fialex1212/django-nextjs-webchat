@@ -25,7 +25,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/authContext";
 import { useUserData } from "@/contexts/userContext";
 
@@ -33,7 +33,7 @@ const formSchema = z.object({
   name: z.string().min(8).max(50),
   is_private: z.boolean(),
   created_by: z.string(),
-  allowed_users: z.array(z.string()),
+  password: z.string().optional(), // Make password optional initially
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -49,9 +49,11 @@ const CreateRoom = () => {
       name: "",
       is_private: false,
       created_by: id,
-      allowed_users: [],
+      password: "",
     },
   });
+
+  const [isPrivate, setIsPrivate] = useState(false); // Local state to handle privacy toggle
 
   const onSubmit = async (data: FormData) => {
     console.log(data);
@@ -84,9 +86,9 @@ const CreateRoom = () => {
       <Toaster />
       <Card className="mx-auto max-w-sm xs:border border-0">
         <CardHeader>
-          <CardTitle className="text-xl">Sign In</CardTitle>
+          <CardTitle className="text-xl">Create Room</CardTitle>
           <CardDescription>
-            Enter your information to sign in to an account
+            Enter your room information to create a new room
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -111,6 +113,7 @@ const CreateRoom = () => {
                     )}
                   />
                 </div>
+
                 <div className="grid gap-2">
                   <FormField
                     control={form.control}
@@ -119,16 +122,46 @@ const CreateRoom = () => {
                       <FormItem>
                         <FormLabel>Is Private</FormLabel>
                         <FormControl>
-                          <Input type="checkbox" {...field} />
+                          <Input
+                            type="checkbox"
+                            checked={isPrivate}
+                            onChange={(e) => {
+                              setIsPrivate(e.target.checked);
+                              field.onChange(e.target.checked); // Update form state
+                            }}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" className="w-full">
-                    Create a room
-                  </Button>
                 </div>
+
+                {isPrivate && (
+                  <div className="grid gap-2">
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Password</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="password"
+                              placeholder="Enter password for private room"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                )}
+
+                <Button type="submit" className="w-full">
+                  Create a Room
+                </Button>
               </form>
             </Form>
           </div>
