@@ -27,45 +27,57 @@ import {
 } from "@/components/ui/form";
 import { useEffect } from "react";
 import { useAuth } from "@/contexts/authContext";
+import { useUserData } from "@/contexts/userContext";
 
 const formSchema = z.object({
   name: z.string().min(8).max(50),
   is_private: z.boolean(),
+  created_by: z.string(),
+  allowed_users: z.array(z.string()),
 });
 
 type FormData = z.infer<typeof formSchema>;
 
 const CreateRoom = () => {
-    const {token} = useAuth();
-    const router = useRouter();
-  
-    const form = useForm<FormData>({
-      resolver: zodResolver(formSchema),
-      defaultValues: {
-        name: "",
-        is_private: false,
-      },
-    });
-  
-    const onSubmit = async (data: FormData) => {
-      console.log(data);
-      try {
-        const response =  await axios.post("http://127.0.0.1:8000/api/rooms/", data);
-        console.log(response.data);
-        toast.success("Successfully signed in.");
-        router.push(`/rooms/${name}`);
-      } catch (error) {
-        toast.error("Something went wrong, check your inputs.");
-        console.log(error);
+  const { id } = useUserData();
+  const { token } = useAuth();
+  const router = useRouter();
+
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      is_private: false,
+      created_by: id,
+      allowed_users: [],
+    },
+  });
+
+  const onSubmit = async (data: FormData) => {
+    console.log(data);
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/rooms/",
+        data
+      );
+      console.log(response.data);
+      toast.success("Successfully created room.");
+      router.push(`/room/${data.name}`);
+    } catch (error) {
+      toast.error("Something went wrong, check your inputs.");
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const checkToken = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      if (!token) {
+        router.push("/auth/sign-in");
       }
     };
-  
-    useEffect(() => {
-      if (token) {
-        router.push("/");
-      }
-    }, [token, router]);
-
+    checkToken();
+  }, [router, token]);
 
   return (
     <main className="flex h-[calc(100vh-100px)] justify-center items-center">
@@ -107,10 +119,7 @@ const CreateRoom = () => {
                       <FormItem>
                         <FormLabel>Is Private</FormLabel>
                         <FormControl>
-                          <Input
-                            type="checkboox"
-                            {...field}
-                          />
+                          <Input type="checkbox" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

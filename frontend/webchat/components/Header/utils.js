@@ -6,5 +6,9 @@ export const headerNavbar = [
     {
         "name": "My rooms",
         "link": "/my-rooms"
+    },
+    {
+        "name": "Create room",
+        "link": "/room/create"
     }
 ]

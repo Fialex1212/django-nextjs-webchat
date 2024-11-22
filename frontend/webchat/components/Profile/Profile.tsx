@@ -37,7 +37,7 @@ const Profile = () => {
         {id && username && email ? (
           <>
             {" "}
-            <Card className="py-4 px-6 flex gap-4 relative mb-2">
+            <Card className="py-4 px-6 flex gap-4 relative mb-4">
               <Avatar className="h-[100px] w-[100px]">
                 <AvatarImage src="https://github.com/shadcn.png" />
                 <AvatarFallback>{username[0]}</AvatarFallback>

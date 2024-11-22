@@ -72,7 +72,7 @@ const SignUp = () => {
   }, [token, router]);
 
   return (
-    <main className="flex h-[calc(100vh-100px)] justify-center items-center">
+    <section className="flex h-[calc(100vh-300px)] justify-center items-center">
       <Toaster />
       <Card className="mx-auto max-w-sm xs:border border-0">
         <CardHeader>
@@ -147,7 +147,7 @@ const SignUp = () => {
           </div>
         </CardContent>
       </Card>
-    </main>
+    </section>
   );
 };
 

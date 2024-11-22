@@ -71,7 +71,7 @@ const SignIn = () => {
   }, [token, router]);
 
   return (
-    <main className="flex h-[calc(100vh-100px)] justify-center items-center">
+    <section className="flex h-[calc(100vh-300px)] justify-center items-center">
       <Toaster />
       <Card className="mx-auto max-w-sm xs:border border-0">
         <CardHeader>
@@ -114,10 +114,10 @@ const SignIn = () => {
                     )}
                   />
                   <Button type="submit" className="w-full">
-                    Create an account
+                    Sign in
                   </Button>
                   <Button variant="outline" className="w-full">
-                    Sign up with GitHub
+                    Sign up with Google
                   </Button>
                 </div>
               </form>
@@ -131,7 +131,7 @@ const SignIn = () => {
           </div>
         </CardContent>
       </Card>
-    </main>
+    </section>
   );
 };
 

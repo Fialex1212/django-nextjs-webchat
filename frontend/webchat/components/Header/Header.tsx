@@ -6,6 +6,7 @@ import Notifications from "./Notifications";
 import Searching from "./Searching";
 import User from "./User";
 import { headerNavbar } from "./utils";
+import { ModeToggle } from "./ModeToggle";
 
 const Header = () => {
   return (
@@ -28,6 +29,7 @@ const Header = () => {
             <Searching />
             <div className="flex justify-center items-center gap-4">
               <Notifications />
+              <ModeToggle />
               <User />
             </div>
           </div>

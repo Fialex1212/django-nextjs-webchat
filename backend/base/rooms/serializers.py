@@ -9,6 +9,12 @@ class RoomSerializer(serializers.ModelSerializer):
         model = Room
         fields = '__all__'
         
+    def validate(self, attrs):
+        # Check if the room is private and if password is provided
+        if attrs.get('is_private') and not attrs.get('password'):
+            raise serializers.ValidationError("Password is required for private rooms.")
+        return attrs
+        
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message

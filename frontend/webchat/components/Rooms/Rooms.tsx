@@ -1,16 +1,15 @@
 "use client";
-import Link from "next/link";
+
 import axios from "axios";
+import Room from "./Room";
 import { useEffect, useState } from "react";
-import { Button } from "../ui/button";
-import { Card, CardContent } from "../ui/card";
 
 interface User {
   id: string;
   username: string;
 }
 
-interface Room {
+interface RoomData {
   id: string;
   name: string;
   is_private: boolean;
@@ -20,7 +19,7 @@ interface Room {
 }
 
 const Rooms = () => {
-  const [rooms, setRooms] = useState<Room[]>([]);
+  const [rooms, setRooms] = useState<RoomData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const getRooms = async () => {
@@ -57,37 +56,15 @@ const Rooms = () => {
   }
 
   return (
-    <main className="flex h-[calc(100vh-100px)] justify-center items-center">
-      <ul className="flex flex-col gap-4 h-fit">
-        {rooms.map((room) => (
-          <Card key={room.id}>
-            <CardContent className="p-10">
-              <li className="">
-                <div>{room.name}</div>
-                <div>Is Private: {room.is_private ? "Yes" : "No"}</div>
-                <div>
-                  Created:{" "}
-                  {new Intl.DateTimeFormat("en-US", {
-                    dateStyle: "medium",
-                    timeStyle: "short",
-                  }).format(new Date(room.created_at))}
-                </div>
-                <ul className="flex gap-4">
-                  {room.allowed_users.map((user) => (
-                    <li key={user.id}>{user.username}</li>
-                  ))}
-                </ul>
-                <Button>
-                  <Link href={`http://localhost:3000/room/${room.name}/`}>
-                    Connect
-                  </Link>
-                </Button>
-              </li>
-            </CardContent>
-          </Card>
-        ))}
-      </ul>
-    </main>
+    <section>
+      <div className="container">
+        <ul className="grid grid-cols-3 gap-4 h-fit">
+          {rooms.map((room) => (
+            <Room key={room.id} room={room} />
+          ))}
+        </ul>
+      </div>
+    </section>
   );
 };
 

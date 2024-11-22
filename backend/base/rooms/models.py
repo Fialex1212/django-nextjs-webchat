@@ -7,8 +7,8 @@ class Room(models.Model):
     name = models.CharField(max_length=255, unique=True) # name of the room
     is_private = models.BooleanField(default=False) # if the room is private
     created_at = models.DateTimeField(auto_now_add=True) # when the room was created
-    created_by = models.ForeignKey(CustomUser, on_delete=models.SET_DEFAULT, null=False, default=1, related_name="created_rooms") # who created the room
-    allowed_users = models.ManyToManyField(CustomUser, blank=True, related_name="rooms") # who can join the room
+    created_by = models.ForeignKey(CustomUser, on_delete=models.SET_DEFAULT, null=True, default=1, related_name="created_rooms") # who created the room
+    password = models.CharField(max_length=255, null=True, blank=True)
     
     def __str__(self) -> str: # return the name of the room
         return f"{self.name}, created by {self.created_by.username}, private: {self.is_private}"

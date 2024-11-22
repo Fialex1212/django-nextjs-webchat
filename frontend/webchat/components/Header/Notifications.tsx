@@ -26,8 +26,8 @@ const Notifications = () => {
     <div className="flex items-center justify-end">
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <div className="relative flex gap-2 border p-2 min-w-10 min-h-10 rounded-[10px]">
-            <BellIcon />
+          <div className="relative flex justify-center items-center gap-2 border p-2 min-w-10 min-h-10 rounded-[10px]">
+            <BellIcon className="h-5 w-5"/>
             <div
               className={`absolute -top-2 -right-1 h-3 w-3 rounded-full my-1 ${
                 nots.find((x: any) => x.read === false)
