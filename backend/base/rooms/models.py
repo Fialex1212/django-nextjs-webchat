@@ -2,6 +2,13 @@ import uuid
 from django.db import models
 from users.models import CustomUser
 
+class Tag(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=255, unique=True)
+    
+    def __str__(self) -> str:
+        return f"{self.name}"
+
 class Room(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255, unique=True) # name of the room
@@ -9,6 +16,7 @@ class Room(models.Model):
     created_at = models.DateTimeField(auto_now_add=True) # when the room was created
     created_by = models.ForeignKey(CustomUser, on_delete=models.SET_DEFAULT, null=True, default=1, related_name="created_rooms") # who created the room
     password = models.CharField(max_length=255, null=True, blank=True)
+    tags = models.ManyToManyField("Tag", blank=True)
     
     def __str__(self) -> str: # return the name of the room
         return f"{self.name}, created by {self.created_by.username}, private: {self.is_private}"

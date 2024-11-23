@@ -5,7 +5,6 @@ import { Card } from "@/components/ui/card";
 import Notifications from "./Notifications";
 import Searching from "./Searching";
 import User from "./User";
-import { headerNavbar } from "./utils";
 import { ModeToggle } from "./ModeToggle";
 
 const Header = () => {
@@ -17,13 +16,6 @@ const Header = () => {
             <Link className="text-[32px] cursor-pointer" href={"/"}>
               WChat
             </Link>
-            <ul className="flex gap-4">
-              {headerNavbar.map((item, key) => (
-                <li key={key}>
-                  <Link className="text-[18px]" href={item.link}>{item.name}</Link>
-                </li>
-              ))}
-            </ul>
           </div>
           <div className="flex justify-center items-center gap-4">
             <Searching />

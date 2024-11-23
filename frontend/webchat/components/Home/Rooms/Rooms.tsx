@@ -3,30 +3,26 @@
 import axios from "axios";
 import Room from "./Room";
 import { useEffect, useState } from "react";
-
-interface User {
-  id: string;
-  username: string;
-}
-
-interface RoomData {
-  id: string;
-  name: string;
-  is_private: boolean;
-  created_at: string;
-  created_by: string;
-  allowed_users: User[];
-}
+import Tags from "./Tags";
+import { useRoomsStorage } from "@/storage/useRoomsStorage";
+import { Toaster } from "react-hot-toast";
+import Popup from "./CreateRoom/Popup";
 
 const Rooms = () => {
-  const [rooms, setRooms] = useState<RoomData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const rooms = useRoomsStorage((state) => state.rooms);
+  const setRooms = useRoomsStorage((state) => state.setRooms);
+  const filteredRooms = useRoomsStorage((state) => state.filteredRooms);
+  const filterRooms = useRoomsStorage((state) => state.filterRooms);
+
+  console.log(rooms);
 
   const getRooms = async () => {
     setLoading(true);
     try {
       const response = await axios.get(`http://127.0.0.1:8000/api/rooms/`);
       setRooms(response.data);
+      filterRooms();
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -35,9 +31,9 @@ const Rooms = () => {
 
   useEffect(() => {
     getRooms();
+    // Disable ESLint for this specific line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.log(rooms);
 
   if (loading) {
     return (
@@ -58,8 +54,13 @@ const Rooms = () => {
   return (
     <section>
       <div className="container">
+        <Toaster />
+        <div className="flex gap-2">
+          <Popup />
+          <Tags />
+        </div>
         <ul className="grid grid-cols-3 gap-4 h-fit">
-          {rooms.map((room) => (
+          {filteredRooms.map((room) => (
             <Room key={room.id} room={room} />
           ))}
         </ul>

@@ -1,8 +1,10 @@
 from django.contrib import admin
 from .models import (
     Room,
-    Message
+    Message,
+    Tag,
 )
 
 admin.site.register(Room)
 admin.site.register(Message)
+admin.site.register(Tag)

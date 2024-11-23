@@ -3,11 +3,13 @@ from rest_framework.response import Response
 from rest_framework.generics import ListCreateAPIView
 from .serializers import (
     RoomSerializer,
-    MessageSerializer
+    MessageSerializer,
+    TagSerializer
 )
 from .models import (
     Room,
-    Message
+    Message,
+    Tag
 )
 
 class RoomListCreatView(ListCreateAPIView):
@@ -26,3 +28,9 @@ class MessageView(APIView):
             serializer.save(room_id=room_id)
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+    
+class TagView(APIView):
+    def get(self, request):
+        tags = Tag.objects.all()
+        serializer = TagSerializer(tags, many=True)
+        return Response(serializer.data)
