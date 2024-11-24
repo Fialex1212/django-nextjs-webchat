@@ -1,8 +1,9 @@
 import { Card, CardContent } from "../../ui/card";
 import { Button } from "../../ui/button";
 import Link from "next/link";
-import { Lock, Unlock, Calendar, Settings } from "lucide-react";
+import { Lock, Unlock, Calendar} from "lucide-react";
 import { useUserData } from "@/contexts/userContext";
+import SettingsRoom from "./SettingsRoom";
 
 interface TagData {
   id: string;
@@ -30,14 +31,14 @@ const Room: React.FC<{ room: Room }> = ({ room }) => {
               {room.name}
               {room.is_private ? <Lock /> : <Unlock />}
             </h4>
-            <p className="flex items-center gap-1 mb-2">
+            <div className="flex items-center gap-1 mb-2">
               <Calendar />
-              <p>
+              <time suppressHydrationWarning>
                 {new Intl.DateTimeFormat("en-US", {
                   dateStyle: "medium",
                 }).format(new Date(room.created_at))}
-              </p>
-            </p>
+              </time>
+            </div>
             <ul className="flex flex-wrap gap-2 mb-2">
               {room.tags.map((tag) => (
                 <li className="w-fit" key={tag.id}>
@@ -57,9 +58,7 @@ const Room: React.FC<{ room: Room }> = ({ room }) => {
               </Link>
             </Button>
             {room.created_by === id && (
-              <Button className="w-10">
-                <Settings color="white" />
-              </Button>
+              <SettingsRoom roomId={room.id} />
             )}
           </div>
         </li>

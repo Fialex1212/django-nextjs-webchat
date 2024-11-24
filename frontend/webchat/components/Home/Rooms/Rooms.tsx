@@ -7,6 +7,7 @@ import Tags from "./Tags";
 import { useRoomsStorage } from "@/storage/useRoomsStorage";
 import { Toaster } from "react-hot-toast";
 import Popup from "./CreateRoom/Popup";
+import { useUserData } from "@/contexts/userContext";
 
 const Rooms = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -14,8 +15,6 @@ const Rooms = () => {
   const setRooms = useRoomsStorage((state) => state.setRooms);
   const filteredRooms = useRoomsStorage((state) => state.filteredRooms);
   const filterRooms = useRoomsStorage((state) => state.filterRooms);
-
-  console.log(rooms);
 
   const getRooms = async () => {
     setLoading(true);
@@ -28,6 +27,8 @@ const Rooms = () => {
       console.log(error);
     }
   };
+
+  console.log(rooms);
 
   useEffect(() => {
     getRooms();
@@ -57,7 +58,7 @@ const Rooms = () => {
         <Toaster />
         <div className="flex gap-2">
           <Popup />
-          <Tags />
+          <Tags/>
         </div>
         <ul className="grid grid-cols-3 gap-4 h-fit">
           {filteredRooms.map((room) => (

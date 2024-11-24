@@ -99,14 +99,14 @@ const Chat: React.FC<ChatRoomProps> = ({ roomName }) => {
                 <li key={index}>
                   {msg.username === guestUsername ? (
                     <div className="flex justify-end">
-                      <Card className="py-2 px-4 bg-blue-600 flex gap-1">
+                      <Card className="py-2 px-4 bg-blue-600 flex gap-1 text-white">
                         {msg.text}
                         <strong>:You</strong>
                       </Card>
                     </div>
                   ) : (
                     <div className="flex justify-start">
-                      <Card className="py-2 px-4 bg-slate-500 flex gap-1">
+                      <Card className="py-2 px-4 bg-slate-500 flex gap-1 text-white">
                         <strong>{msg.username}:</strong>
                         {msg.text}
                       </Card>

@@ -86,6 +86,13 @@ const CreateRoom = () => {
     }
   };
 
+  const inOneClick = () => {
+    const randomRoomName = `Room${Math.floor(Math.random() * 100000)}`;
+    form.setValue("name", randomRoomName);
+    form.setValue("is_private", true);
+    form.setValue("password", "password");
+  };
+  
   useEffect(() => {
     const checkToken = async () => {
       await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -164,6 +171,8 @@ const CreateRoom = () => {
             <Button className="text-white" type="submit">
               Create a Room
             </Button>
+            <p className="text-center">ro</p>
+            <Button className="text-white" onClick={inOneClick} type="submit">Create a room in one click</Button>
           </form>
         </Form>
       </div>

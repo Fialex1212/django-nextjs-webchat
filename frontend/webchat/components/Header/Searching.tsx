@@ -18,7 +18,7 @@ const Searching = () => {
   return (
     <form onSubmit={handleSearch}>
       <Input
-        className="w-[400px] h-[50px]"
+        className="w-[340px] h-[40px]"
         placeholder="Search..."
         onChange={(e) => setQuery(e.target.value)}
       />

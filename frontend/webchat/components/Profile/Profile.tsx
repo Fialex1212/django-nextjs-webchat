@@ -8,7 +8,7 @@ import { Card } from "../ui/card";
 import { useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { userButtons } from "./utils";
-import { LogOut, Settings } from "lucide-react";
+import { LogOut } from "lucide-react";
 
 const Profile = () => {
   const { id, username, email, clearUserData } = useUserData();

@@ -16,6 +16,12 @@ class RoomListCreatView(ListCreateAPIView):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
     
+class RoomDetailView(APIView):
+    def delete(self, request, room_id):
+        room = Room.objects.get(id=room_id)
+        room.delete()
+        return Response("Room deleted successfully", status=204)
+    
 class MessageView(APIView):
     def get(self, request, room_id):
         messages = Message.objects.filter(room_id=room_id).order_by("created_at")
