@@ -8,10 +8,11 @@ from .models import (
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = '__all__'
+        fields = ['id', 'name']
 
 class RoomSerializer(serializers.ModelSerializer):
-    tags = TagSerializer(many=True)
+    tags = TagSerializer(many=True)  # Use TagSerializer to include tag details (like name)
+    
     class Meta:
         model = Room
         fields = '__all__'
@@ -29,12 +30,22 @@ class RoomSerializer(serializers.ModelSerializer):
         # Create the Room instance
         room = Room.objects.create(**validated_data)
 
-        # Create Tag instances and associate them with the Room
+        # Process tags: create if they don't exist, add to room if they do
         for tag_data in tags_data:
-            tag, created = Tag.objects.get_or_create(**tag_data)
-            room.tags.add(tag)
+            tag, created = Tag.objects.get_or_create(name=tag_data['name'])
+            room.tags.add(tag)  # Add the tag to the room
 
         return room
+    
+    def to_representation(self, instance):
+        # Override `to_representation` to return tag names instead of IDs
+        representation = super().to_representation(instance)
+        representation['tags'] = [
+            {"id": tag.id, "name": tag.name} for tag in instance.tags.all()
+        ] # Get tag ids and names
+        return representation
+
+
         
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:

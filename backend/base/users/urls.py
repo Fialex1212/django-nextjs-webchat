@@ -11,7 +11,8 @@ from .views import (
     CustomTokenObtainPairView,
     PasswordResetRequestView,
     PasswordResetConfirmView,
-    UsernameChangeView
+    UsernameChangeView,
+    AddFriendView
 )
 
 urlpatterns = [
@@ -31,5 +32,8 @@ urlpatterns = [
     
     #Change username
     path('change-username/', UsernameChangeView.as_view(), name='change_username'),
+    
+    #Add frined
+    path('add-friend/', AddFriendView.as_view(), name='add-friend'),
     
 ]

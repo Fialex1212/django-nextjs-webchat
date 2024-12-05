@@ -4,10 +4,9 @@ import axios from "axios";
 import Room from "./Room";
 import { useEffect, useState } from "react";
 import Tags from "./Tags";
-import { useRoomsStorage } from "@/storage/useRoomsStorage";
+import { useRoomsStorage } from "@/store/useRoomsStorage";
 import { Toaster } from "react-hot-toast";
 import Popup from "./CreateRoom/Popup";
-import { useUserData } from "@/contexts/userContext";
 
 const Rooms = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -54,17 +53,19 @@ const Rooms = () => {
 
   return (
     <section>
-      <div className="container">
+      <div className="container relative">
         <Toaster />
         <div className="flex gap-2">
-          <Popup />
-          <Tags/>
+          <Tags />
         </div>
         <ul className="grid grid-cols-3 gap-4 h-fit">
           {filteredRooms.map((room) => (
             <Room key={room.id} room={room} />
           ))}
         </ul>
+        <div className="absolute bottom-[-200px] right-[20px]">
+        <Popup />
+      </div>
       </div>
     </section>
   );

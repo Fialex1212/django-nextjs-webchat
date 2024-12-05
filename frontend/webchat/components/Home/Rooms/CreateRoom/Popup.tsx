@@ -7,14 +7,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import CreateRoom from "./CreateRoom"
+import RoomCreate from "./CreateRoom"
+import {Plus} from "lucide-react"
 
 
 const Popup = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="py-2 px-6 cursor-pointer" variant="outline">Create you room</Button>
+        <Button className="w-[40px] h-[40px] rounded-[40px] cursor-pointer" variant="outline"><Plus /></Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -23,7 +24,7 @@ const Popup = () => {
             Create you room and invite your friends
           </DialogDescription>
         </DialogHeader>
-        <CreateRoom />
+        <RoomCreate />
       </DialogContent>
     </Dialog>
   )

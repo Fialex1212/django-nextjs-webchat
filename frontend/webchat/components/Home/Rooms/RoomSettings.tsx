@@ -13,11 +13,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Settings } from "lucide-react";
-import { useRoomsStorage } from "@/storage/useRoomsStorage";
+import { useRoomsStorage } from "@/store/useRoomsStorage";
 
-const SettingsRoom = ({ roomId }) => {
-    const { rooms, setRooms } = useRoomsStorage();
-  const deleteRoom = async (id) => {
+interface RoomSettingsProps{
+  roomId: string;
+}
+
+const RoomSettings: React.FC<RoomSettingsProps> = ({ roomId }) => {
+  const { rooms, setRooms } = useRoomsStorage();
+  const deleteRoom = async (id: string) => {
     try {
       const response = await axios.delete(
         `http://127.0.0.1:8000/api/rooms/${id}/`
@@ -49,4 +53,4 @@ const SettingsRoom = ({ roomId }) => {
   );
 };
 
-export default SettingsRoom;
+export default RoomSettings;

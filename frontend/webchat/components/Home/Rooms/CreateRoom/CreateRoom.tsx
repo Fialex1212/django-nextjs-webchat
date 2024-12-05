@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import ListTags from "./ListTags"
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,6 +22,7 @@ import {
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/authContext";
 import { useUserData } from "@/contexts/userContext";
+import { log } from "console";
 
 interface TagData {
   id: string;
@@ -38,7 +40,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const CreateRoom = () => {
-  const [tags, setTags] = useState<TagData[]>([]);
+  const [selectedTags, setSelectedTags] = useState<TagData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [isPrivate, setIsPrivate] = useState(false);
   const { id } = useUserData();
@@ -58,24 +60,18 @@ const CreateRoom = () => {
     },
   });
 
-  const getTags = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get("http://127.0.0.1:8000/api/rooms/tags/");
-      setTags(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
   const onSubmit = async (data: FormData) => {
-    console.log(data);
+    console.log(selectedTags);
+    
+    const formData = {
+      ...data,
+      tags: selectedTags.map((tag) => tag.name), // You may adjust the field name if necessary
+    };
+    console.log(formData);
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/api/rooms/",
-        data
+        formData
       );
       console.log(response.data);
       toast.success("Successfully created room.");
@@ -167,11 +163,11 @@ const CreateRoom = () => {
                 />
               </div>
             )}
-            {"//TODO: Add tags using dropdown menu"}
+            <ListTags selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
             <Button className="text-white" type="submit">
               Create a Room
             </Button>
-            <p className="text-center">ro</p>
+            <p className="text-center">Or</p>
             <Button className="text-white" onClick={inOneClick} type="submit">Create a room in one click</Button>
           </form>
         </Form>

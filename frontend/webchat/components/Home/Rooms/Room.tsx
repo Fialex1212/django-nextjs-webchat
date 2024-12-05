@@ -3,7 +3,8 @@ import { Button } from "../../ui/button";
 import Link from "next/link";
 import { Lock, Unlock, Calendar} from "lucide-react";
 import { useUserData } from "@/contexts/userContext";
-import SettingsRoom from "./SettingsRoom";
+import RoomSettings from "./RoomSettings";
+import { log } from "console";
 
 interface TagData {
   id: string;
@@ -21,7 +22,7 @@ interface Room {
 
 const Room: React.FC<{ room: Room }> = ({ room }) => {
   const {id} = useUserData();
-
+  console.log(room.tags);
   return (
     <Card>
       <CardContent className="px-6 py-4 h-full">
@@ -58,7 +59,7 @@ const Room: React.FC<{ room: Room }> = ({ room }) => {
               </Link>
             </Button>
             {room.created_by === id && (
-              <SettingsRoom roomId={room.id} />
+              <RoomSettings roomId={room.id} />
             )}
           </div>
         </li>

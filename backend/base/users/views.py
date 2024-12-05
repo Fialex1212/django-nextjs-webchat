@@ -12,6 +12,8 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.mail import send_mail
 from django.conf import settings
 from uuid import UUID
+from .utils import add_friend
+from django.contrib.auth import get_user_model
 
 token_generator = PasswordResetTokenGenerator()
 
@@ -107,3 +109,22 @@ class UsernameChangeView(APIView):
         user.save()
         
         return Response({"message": "Username has been changed successfully"}, status=status.HTTP_200_OK)
+    
+class AddFriendView(APIView):
+    
+    def post(self, request):
+        requesting_user = request.user
+        target_user_id = request.data.get("target_user_id")
+        
+        if not target_user_id:
+            return Response({"detail": "Target user ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+    
+        try:
+            target_user = get_user_model().objects.get(id=target_user_id)
+        except get_user_model().DoesNotExist:
+            return Response({"detail": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        add_friend(requesting_user, target_user)
+
+        # Return a success response
+        return Response({"detail": "Friend added successfully"}, status=status.HTTP_200_OK)

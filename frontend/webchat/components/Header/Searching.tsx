@@ -1,17 +1,16 @@
-import React, { useState } from "react";
 import { Input } from "../ui/input";
-import axios from "axios";
 import { useRouter } from "next/navigation";
-import { set } from "zod";
+import useSearchStore from "@/store/useSearchStore";
 
 const Searching = () => {
-  const [query, setQuery] = useState<string>("");
+  const { query, setQuery, getData } = useSearchStore();
   const router = useRouter();
 
   const handleSearch = async (e) => {
     e.preventDefault();
     if (query.trim()) {
       router.push(`/search?q=${encodeURIComponent(query)}`);
+      await getData();
     }
   };
 

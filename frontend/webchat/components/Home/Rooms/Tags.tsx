@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import cn from "classnames";
 import { Card } from "@/components/ui/card";
-import { useRoomsStorage } from "@/storage/useRoomsStorage";
+import { useRoomsStorage } from "@/store/useRoomsStorage";
 import { useUserData } from "@/contexts/userContext";
+import { log } from "console";
 
 interface TagData {
   id: string;
@@ -24,13 +25,12 @@ const Tags = () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/api/rooms/tags/");
       setTags(response.data);
-      setLoading(false);
     } catch (error) {
       console.log(error);
+    } finally {
       setLoading(false);
     }
-  };  
-
+  };
 
   const handleTagClick = (tag: string) => {
     const newSelectedTags = selectedTags.includes(tag)
@@ -42,27 +42,34 @@ const Tags = () => {
 
   const filterMyRooms = (rooms: Array<any>) => {
     if (!Array.isArray(rooms)) {
-      console.error("rooms is not an array:", rooms);
+      console.error("Invalid rooms data: Expected an array but got", rooms);
       return [];
     }
-    // Filter rooms where `created_by` matches the current user's ID
+    console.log(rooms.filter((room) => room.created_by === id));
     return rooms.filter((room) => room.created_by === id);
   };
-  
+
   const handleMyRoomsClick = () => {
     const newSelectedTags = selectedTags.includes("My rooms")
       ? selectedTags.filter((t) => t !== "My rooms")
       : [...selectedTags, "My rooms"];
     setSelectedTags(newSelectedTags);
-    filterRooms()
+    filterRooms();
     const myRooms = filterMyRooms(rooms);
-    console.log("Filtered rooms created by user:", myRooms);
+    console.log(
+      "Filtered rooms created by user:",
+      JSON.stringify(myRooms, null, 2) // Converts objects into a readable string
+    );
   };
-  
 
   useEffect(() => {
     getTags();
   }, []);
+
+  useEffect(() => {
+    filterRooms();
+  }, [selectedTags]);
+  
 
   if (loading) {
     return <div>Loading...</div>;
@@ -71,8 +78,8 @@ const Tags = () => {
   return (
     <div>
       <ul className="flex flex-wrap gap-2 mb-4">
-        {tags.map((tag, index) => (
-          <li key={index}>
+        {tags.map((tag) => (
+          <li key={tag.id}>
             <Card
               className={cn("py-2 px-6 cursor-pointer", {
                 "bg-blue-600 text-white": selectedTags.includes(tag.name),

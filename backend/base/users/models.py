@@ -29,6 +29,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(blank=True, unique=True)
     username = models.CharField(max_length=255, blank=True, unique=True)
+    friends = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='friends_with')
 
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
