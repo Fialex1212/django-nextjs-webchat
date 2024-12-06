@@ -27,8 +27,8 @@ class RoomDetailView(APIView):
         except Room.DoesNotExist:
             raise NotFound({"detail": "Room not found"}, status=status.HTTP_404_NOT_FOUND)
     
-    def delete(self, request, room_id):
-        room = Room.objects.get(id=room_id)
+    def delete(self, request, room_name):
+        room = Room.objects.get(name=room_name)
         room.delete()
         return Response("Room deleted successfully", status=status.HTTP_204_NO_CONTENT)
     

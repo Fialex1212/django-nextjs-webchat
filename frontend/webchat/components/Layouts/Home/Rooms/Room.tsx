@@ -1,5 +1,5 @@
-import { Card, CardContent } from "../../ui/card";
-import { Button } from "../../ui/button";
+import { Card, CardContent } from "@/components/ui//card";
+import { Button } from "@/components/ui//button";
 import Link from "next/link";
 import { Lock, Unlock, Calendar} from "lucide-react";
 import { useUserData } from "@/contexts/userContext";
@@ -53,13 +53,13 @@ const Room: React.FC<{ room: Room }> = ({ room }) => {
             <Button className="w-full text-salate-50">
               <Link
                 className="w-full h-full text-slate-50"
-                href={`http://localhost:3000/room/${room.name}/`}
+                href={`room/${room.name}/`}
               >
                 Connect
               </Link>
             </Button>
             {room.created_by === id && (
-              <RoomSettings roomId={room.id} />
+              <RoomSettings name={room.name} />
             )}
           </div>
         </li>

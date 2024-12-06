@@ -11,14 +11,12 @@ interface Room {
   name: string;
 }
 
-//User interface
 interface SearchItem {
   id: string;
   name: string;
   type: "user" | "room";
 }
 
-//Search interface
 interface SearchState {
   query: string;
   searchResults: {
@@ -63,11 +61,11 @@ const useSearchStore = create<SearchState>((set, get) => ({
   },
   getData: async () => {
     const { query } = get();
-    set({ isLoading: true, error: null, searchResults: { users: [], rooms: [] }, results: [] }); // Reset previous data
+    set({ isLoading: true, error: null, searchResults: { users: [], rooms: [] }, results: [] });
 
     try {
-      const response = await fetch(`http://localhost:8000/api/search/?q=${query}`);
-      const data = await response.json();
+      const response = await axios.get(`http://localhost:8000/api/search/?q=${query}`);
+      const data = await response.data;
       set({
         searchResults: data,
         isLoading: false,

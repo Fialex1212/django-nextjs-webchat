@@ -1,4 +1,7 @@
-import Header from "@/components/Header/Header";
+"use client"
+
+import Header  from "@/components/Header/Header";
+import { useState } from "react";
 
 export default function WebchatLayout({
   children,
@@ -8,7 +11,7 @@ export default function WebchatLayout({
   return (
     <html lang="en">
       <body>
-        <Header />
+        <Header/>
         {children}
       </body>
     </html>

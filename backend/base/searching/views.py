@@ -7,7 +7,6 @@ from users.models import CustomUser
 from users.serializers import UserSerializers
 
 class SearchView(APIView):
-    pass
 
     def get(self, request):
         query = request.query_params.get('q', '')

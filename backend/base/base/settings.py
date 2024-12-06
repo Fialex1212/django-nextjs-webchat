@@ -9,6 +9,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+APPEND_SLASH=False
+
 AUTH_USER_MODEL = 'users.CustomUser'
 
 INSTALLED_APPS = [

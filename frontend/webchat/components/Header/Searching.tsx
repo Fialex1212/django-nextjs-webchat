@@ -6,7 +6,7 @@ const Searching = () => {
   const { query, setQuery, getData } = useSearchStore();
   const router = useRouter();
 
-  const handleSearch = async (e) => {
+  const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (query.trim()) {
       router.push(`/search?q=${encodeURIComponent(query)}`);
@@ -15,13 +15,15 @@ const Searching = () => {
   };
 
   return (
-    <form onSubmit={handleSearch}>
-      <Input
-        className="w-[340px] h-[40px]"
-        placeholder="Search..."
-        onChange={(e) => setQuery(e.target.value)}
-      />
-    </form>
+    <div className="invisible sm:visible w-0 sm:w-fit">
+      <form onSubmit={handleSearch}>
+        <Input
+          className="w-[280px] h-[40px]"
+          placeholder="Search..."
+          onChange={(e) => setQuery(e.target.value)}
+        />
+      </form>
+    </div>
   );
 };
 

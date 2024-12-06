@@ -4,7 +4,8 @@ import cn from "classnames";
 import { Card } from "@/components/ui/card";
 import { useRoomsStorage } from "@/store/useRoomsStorage";
 import { useUserData } from "@/contexts/userContext";
-import { log } from "console";
+import useFiltersStore from "@/store/useFiltersStore";
+import TagsDrawer from "./TagsDrawer";
 
 interface TagData {
   id: string;
@@ -69,15 +70,14 @@ const Tags = () => {
   useEffect(() => {
     filterRooms();
   }, [selectedTags]);
-  
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div>
-      <ul className="flex flex-wrap gap-2 mb-4">
+    <div className="flex justify-end md:justify-normal">
+      <ul className="hidden md:flex flex-wrap gap-2 mb-4">
         {tags.map((tag) => (
           <li key={tag.id}>
             <Card
@@ -101,6 +101,7 @@ const Tags = () => {
           </Card>
         </li>
       </ul>
+      <TagsDrawer handleMyRoomsClick={handleMyRoomsClick} handleTagClick={handleTagClick} tags={tags}/>
     </div>
   );
 };

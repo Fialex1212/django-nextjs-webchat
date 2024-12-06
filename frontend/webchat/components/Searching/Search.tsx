@@ -1,8 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
 import { Card, CardContent } from "../ui/card";
 import Link from "next/link";
 import useSearchStore from "@/store/useSearchStore";
@@ -10,15 +9,14 @@ import useSearchStore from "@/store/useSearchStore";
 const Search = () => {
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("q");
-  const { results, query, setQuery, getData, isLoading, error } =
-    useSearchStore();
+  const { results, query, setQuery, getData, isLoading, error } = useSearchStore();
 
-    useEffect(() => {
-      if (searchQuery && searchQuery !== query) {
-        setQuery(searchQuery);
-        getData();  // Trigger a new search
-      }
-    }, [searchQuery, query, setQuery, getData]);
+  useEffect(() => {
+    if (searchQuery && searchQuery !== query) {
+      setQuery(searchQuery); // Update store query if searchQuery changes
+      getData();  // Trigger a new search
+    }
+  }, [searchQuery, query, setQuery, getData]);
 
   if (isLoading) {
     return <p className="text-center py-4">Loading...</p>;

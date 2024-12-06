@@ -16,17 +16,17 @@ import { Settings } from "lucide-react";
 import { useRoomsStorage } from "@/store/useRoomsStorage";
 
 interface RoomSettingsProps{
-  roomId: string;
+  name: string;
 }
 
-const RoomSettings: React.FC<RoomSettingsProps> = ({ roomId }) => {
+const RoomSettings: React.FC<RoomSettingsProps> = ({ name }) => {
   const { rooms, setRooms } = useRoomsStorage();
   const deleteRoom = async (id: string) => {
     try {
       const response = await axios.delete(
-        `http://127.0.0.1:8000/api/rooms/${id}/`
+        `http://127.0.0.1:8000/api/rooms/${name}/`
       );
-      setRooms(rooms.filter((room) => room.id !== id));
+      setRooms(rooms.filter((room) => room.name !== name));
       console.log(response.data);
       toast.success("Successfully deleted room.");
     } catch (error) {
@@ -45,7 +45,7 @@ const RoomSettings: React.FC<RoomSettingsProps> = ({ roomId }) => {
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>Settings</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => deleteRoom(roomId)}>
+        <DropdownMenuItem onClick={() => deleteRoom(name)}>
           Delete
         </DropdownMenuItem>
       </DropdownMenuContent>

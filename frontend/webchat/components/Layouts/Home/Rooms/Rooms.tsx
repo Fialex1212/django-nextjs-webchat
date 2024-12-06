@@ -55,15 +55,15 @@ const Rooms = () => {
     <section>
       <div className="container relative">
         <Toaster />
-        <div className="flex gap-2">
+        <div className="md:flex md:gap-2">
           <Tags />
         </div>
-        <ul className="grid grid-cols-3 gap-4 h-fit">
+        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 h-fit">
           {filteredRooms.map((room) => (
             <Room key={room.id} room={room} />
           ))}
         </ul>
-        <div className="absolute bottom-[-200px] right-[20px]">
+        <div className="absolute right-[20px]">
         <Popup />
       </div>
       </div>
