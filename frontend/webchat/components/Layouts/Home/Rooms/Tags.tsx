@@ -4,7 +4,6 @@ import cn from "classnames";
 import { Card } from "@/components/ui/card";
 import { useRoomsStorage } from "@/store/useRoomsStorage";
 import { useUserData } from "@/contexts/userContext";
-import useFiltersStore from "@/store/useFiltersStore";
 import TagsDrawer from "./TagsDrawer";
 
 interface TagData {

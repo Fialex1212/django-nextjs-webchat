@@ -63,9 +63,9 @@ const Rooms = () => {
             <Room key={room.id} room={room} />
           ))}
         </ul>
-        <div className="absolute right-[20px]">
-        <Popup />
-      </div>
+        <div className="absolute top-0 md:top-auto left-[20px] md:left-auto md:bottom-[-20[px]] md:right-[20px]">
+          <Popup />
+        </div>
       </div>
     </section>
   );

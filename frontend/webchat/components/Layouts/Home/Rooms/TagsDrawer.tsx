@@ -16,14 +16,14 @@ import { SlidersHorizontal } from "lucide-react";
 
 const TagsDrawer = ({ handleTagClick, handleMyRoomsClick, tags }) => {
   const selectedTags = useRoomsStorage((state) => state.selectedTags);
-  const setSelectedTags = useRoomsStorage((state) => state.setSelectedTags);
-  const filterRooms = useRoomsStorage((state) => state.filterRooms);
 
   return (
     <div>
       <Drawer>
         <DrawerTrigger>
-          <SlidersHorizontal className="flex md:hidden mb-4" />
+          <div className="">
+            <SlidersHorizontal className="flex md:hidden mb-4" />
+          </div>
         </DrawerTrigger>
         <DrawerContent>
           <DrawerHeader>

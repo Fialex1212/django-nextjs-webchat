@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Send, Copy } from "lucide-react";
+import { Send } from "lucide-react";
 import { Form } from "../ui/form";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -33,6 +33,7 @@ const Chat: React.FC<ChatRoomProps> = ({ roomName }) => {
   const [loading, setLoading] = useState<boolean | null>(null);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [password, setPassword] = useState("");
+
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -73,26 +74,7 @@ const Chat: React.FC<ChatRoomProps> = ({ roomName }) => {
           if (!data.is_private) {
             setRoomExists(true);
           } else {
-            const password = prompt("Enter the room password:");
-            if (password) {
-              const passwordCheckResponse = await fetch(
-                `http://127.0.0.1:8000/api/rooms/${data.room_id}/check_password/`,
-                {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ password }),
-                }
-              );
-
-              if (passwordCheckResponse.ok) {
-                setRoomExists(true);
-              } else {
-                alert("Incorrect password.");
-                setRoomExists(false);
-              }
-            } else {
-              setRoomExists(false);
-            }
+            setShowPasswordModal(true);
           }
         } else if (response.status === 404) {
           setRoomExists(false);
@@ -137,12 +119,57 @@ const Chat: React.FC<ChatRoomProps> = ({ roomName }) => {
     };
 
     setSocket(ws);
-    console.log(roomName);
 
     return () => {
       ws.close();
     };
   }, [roomName, username, roomExists]);
+
+  const handlePasswordSubmit = async () => {
+    try {
+      const passwordCheckResponse = await fetch(
+        `http://127.0.0.1:8000/api/rooms/${roomName}/check_password/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password }),
+        }
+      );
+  
+      if (passwordCheckResponse.ok) {
+        setRoomExists(true);
+        setShowPasswordModal(false);
+  
+        if (!socket || socket.readyState === WebSocket.CLOSED) {
+          const ws = new WebSocket(`ws://localhost:8000/ws/chat/${roomName}/`);
+  
+          ws.onopen = () => {
+            console.log("Connected to WebSocket");
+          };
+  
+          ws.onmessage = (event: MessageEvent) => {
+            const data = JSON.parse(event.data);
+            setMessages((prevMessages) => [
+              ...prevMessages,
+              { username: data.username, text: data.message },
+            ]);
+          };
+  
+          ws.onclose = () => {
+            console.log("Disconnected from WebSocket");
+          };
+  
+          setSocket(ws);
+        }
+      } else {
+        alert("Incorrect password.");
+      }
+    } catch (error) {
+      console.error("Error checking password:", error);
+    }
+  };
+  
+  
 
   if (loading === true) {
     return (
@@ -230,36 +257,25 @@ const Chat: React.FC<ChatRoomProps> = ({ roomName }) => {
             </Form>
           </CardFooter>
           {showPasswordModal && (
-            <div className="modal">
-              <div className="modal-content">
-                <h2>Enter Password</h2>
+            <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+              <div className="bg-white p-6 rounded shadow-md w-[300px]">
+                <h2 className="text-lg font-bold mb-4">Enter Password</h2>
                 <Input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Room Password"
+                  className="mb-4"
                 />
-                <Button
-                  onClick={async () => {
-                    const passwordCheckResponse = await fetch(
-                      `http://127.0.0.1:8000/api/rooms/${roomName}/check_password/`,
-                      {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ password }),
-                      }
-                    );
-
-                    if (passwordCheckResponse.ok) {
-                      setRoomExists(true);
-                      setShowPasswordModal(false);
-                    } else {
-                      alert("Incorrect password.");
-                    }
-                  }}
-                >
-                  Submit
-                </Button>
+                <div className="flex justify-end gap-2">
+                  <Button
+                    variant="secondary"
+                    onClick={() => setShowPasswordModal(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button onClick={handlePasswordSubmit}>Submit</Button>
+                </div>
               </div>
             </div>
           )}

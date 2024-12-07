@@ -27,7 +27,7 @@ const User = () => {
       {token ? (
         <HoverCard>
           <HoverCardTrigger>
-            <Link href="/profile">
+            <Link href="/profile/me ">
               <Avatar>
                 <AvatarImage src="https://github.com/shadcn.png" />
                 <AvatarFallback>{username[0]}</AvatarFallback>
@@ -36,7 +36,7 @@ const User = () => {
           </HoverCardTrigger>
           <HoverCardContent className="mt-5 w-fit">
             <div className="flex flex-col gap-[18px]">
-              <Link className="flex items-center gap-[10px]" href={"/profile/settings"}><Settings /> Settings</Link>
+              <Link className="flex items-center gap-[10px]" href={"/profile/me/settings"}><Settings /> Settings</Link>
               <div className="flex items-center gap-[10px] cursor-pointer" onClick={logout}><LogOut />Leave</div>
             </div>
           </HoverCardContent>

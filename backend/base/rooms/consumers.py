@@ -1,16 +1,22 @@
 import json
+import re
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        # Get room name from the URL parameters
         self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = f'chat_{self.room_name}'
+
+        # Sanitize room name: replace spaces, apostrophes, and other invalid characters with underscores
+        self.room_group_name = f'chat_{re.sub(r"[^a-zA-Z0-9._-]", "_", self.room_name)}'
 
         # Join room group
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
         )
+
+        # Accept WebSocket connection
         await self.accept()
 
     async def disconnect(self, close_code):

@@ -23,7 +23,7 @@ urlpatterns = [
     
     #Users info
     path('list/', UserListCreateView.as_view(), name='get_users'),
-    path('user/<str:id>/', UserDetailView.as_view(), name='get_user'),
+    path('<str:username>/', UserDetailView.as_view(), name='get_user'),
     path('user/update/', UserUpdateView.as_view(), name='update_user'),
     
     #Reset password

@@ -15,7 +15,7 @@ const Popup = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="w-[40px] h-[40px] rounded-[40px] cursor-pointer" variant="outline"><Plus /></Button>
+        <Button className=" h-[40px] rounded-[40px] cursor-pointer" variant="outline"><Plus />Create your room</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

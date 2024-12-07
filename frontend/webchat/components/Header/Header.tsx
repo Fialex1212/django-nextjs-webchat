@@ -6,13 +6,12 @@ import Notifications from "./Notifications";
 import Searching from "./Searching";
 import User from "./User";
 import { ModeToggle } from "./ModeToggle";
-import useBurgerStore from "@/store/useBurgerStore";
+import ToggleBurger from "@/components/Header/Burger/ToggleBurger";
 
 const Header = () => {
-  const {toggleBurger} = useBurgerStore();
 
   return (
-    <div className="my-8">
+    <header className="my-8">
       <div className="container">
         <Card className="w-full h-[70px] py-2 px-6 flex justify-between">
           <div className="flex justify-center items-center gap-6">
@@ -30,18 +29,11 @@ const Header = () => {
               <ModeToggle />
               <User />
             </div>
-            <div
-              className="block HAMBURGER-ICON space-y-2 sm:hidden"
-              onClick={() => toggleBurger()}
-            >
-              <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
-              <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
-              <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
-            </div>
+            <ToggleBurger />
           </div>
         </Card>
       </div>
-    </div>
+    </header>
   );
 };
 

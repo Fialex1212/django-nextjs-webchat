@@ -46,9 +46,9 @@ class MessageView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CheckRoomPasswordView(APIView):
-    def post(self, request, room_id):
+    def post(self, request, room_name):
         try:
-            room = Room.objects.get(id=room_id)
+            room = Room.objects.get(name=room_name)
             password = request.data.get("password", "")
             if room.password == password:
                 return Response({"detail": "Password correct"}, status=status.HTTP_200_OK)

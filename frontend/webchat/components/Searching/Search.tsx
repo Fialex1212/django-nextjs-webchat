@@ -34,7 +34,7 @@ const Search = () => {
             <ul className="results__list flex flex-col gap-3">
               {results.map((item) => (
                 <li key={item.id}>
-                  <Link href={`/profile/${item.id}`}>
+                  <Link href={`/profile/${item.name}`}>
                     <Card className="flex items-center">
                       <CardContent className="py-4 text-[20px]">
                         {item.name}
