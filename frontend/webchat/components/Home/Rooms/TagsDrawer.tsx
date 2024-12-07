@@ -11,7 +11,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { cn } from "@/lib/utils";
-import { useRoomsStorage } from "@/store/useRoomsStorage";
+import { useRoomsStorage } from "@/stores/useRoomsStorage";
 import { SlidersHorizontal } from "lucide-react";
 
 const TagsDrawer = ({ handleTagClick, handleMyRoomsClick, tags }) => {

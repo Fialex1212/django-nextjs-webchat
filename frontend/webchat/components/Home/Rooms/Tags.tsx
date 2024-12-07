@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import cn from "classnames";
 import { Card } from "@/components/ui/card";
-import { useRoomsStorage } from "@/store/useRoomsStorage";
+import { useRoomsStorage } from "@/stores/useRoomsStorage";
 import { useUserData } from "@/contexts/userContext";
 import TagsDrawer from "./TagsDrawer";
 
@@ -56,11 +56,12 @@ const Tags = () => {
     setSelectedTags(newSelectedTags);
     filterRooms();
     const myRooms = filterMyRooms(rooms);
-    console.log(
-      "Filtered rooms created by user:",
-      JSON.stringify(myRooms, null, 2) // Converts objects into a readable string
-    );
   };
+
+  // console.log(
+  //   "Filtered rooms created by user:",
+  //   JSON.stringify(myRooms, null, 2) // Converts objects into a readable string
+  // );
 
   useEffect(() => {
     getTags();
@@ -68,7 +69,7 @@ const Tags = () => {
 
   useEffect(() => {
     filterRooms();
-  }, [selectedTags]);
+  }, [selectedTags, filterRooms]);
 
   if (loading) {
     return <div>Loading...</div>;

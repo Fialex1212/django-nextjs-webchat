@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Settings } from "lucide-react";
-import { useRoomsStorage } from "@/store/useRoomsStorage";
+import { useRoomsStorage } from "@/stores/useRoomsStorage";
 
 interface RoomSettingsProps{
   name: string;
@@ -27,7 +27,6 @@ const RoomSettings: React.FC<RoomSettingsProps> = ({ name }) => {
         `http://127.0.0.1:8000/api/rooms/${name}/`
       );
       setRooms(rooms.filter((room) => room.name !== name));
-      console.log(response.data);
       toast.success("Successfully deleted room.");
     } catch (error) {
       console.log(error);

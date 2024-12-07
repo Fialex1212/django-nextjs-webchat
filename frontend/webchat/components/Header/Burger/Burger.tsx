@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import ToggleBurger from "./ToggleBurger";
 import Link from "next/link";
 import { ModeToggle } from "../ModeToggle";
-import useBurgerStore from "@/store/useBurgerStore";
+import useBurgerStore from "@/stores/useBurgerStore";
 
 const Burger = () => {
   const { isOpen, toggleBurger, closeMenu } = useBurgerStore();

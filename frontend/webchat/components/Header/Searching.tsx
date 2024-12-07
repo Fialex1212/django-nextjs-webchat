@@ -1,6 +1,6 @@
 import { Input } from "../ui/input";
 import { useRouter } from "next/navigation";
-import useSearchStore from "@/store/useSearchStore";
+import useSearchStore from "@/stores/useSearchStore";
 
 const Searching = () => {
   const { query, setQuery, getData } = useSearchStore();

@@ -1,4 +1,4 @@
-import useBurgerStore from "@/store/useBurgerStore";
+import useBurgerStore from "@/stores/useBurgerStore";
 
 const ToggleBurger = () => {
   const { toggleBurger } = useBurgerStore();

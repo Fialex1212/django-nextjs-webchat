@@ -3,12 +3,12 @@ import { Captions, Mail, KeySquare, UserRoundX, Settings, Bell } from 'lucide-re
 export const userButtons =[
     {
         name: "Settings",
-        link: "/profile/settings",
+        link: "/profile/me/settings",
         icon: <Settings />,
     },
     {
         name: "Notifications",
-        link: "/profile/notifications",
+        link: "/profile/me/notifications",
         icon: <Bell />,
     }
 ]
@@ -16,22 +16,22 @@ export const userButtons =[
 export const settingsData = [
     {
         name: "Change username",
-        link: "/profile/settings/change-username",
+        link: "/profile/me/settings/change-username",
         icon: <Captions />,
     },
     {
         name: "Change email",
-        link: "/profile/settings/change-email",
+        link: "/profile/me/settings/change-email",
         icon: <Mail />,
     },
     {
         name: "Change password",
-        link: "/profile/settings/change-password",
+        link: "/profile/me/settings/change-password",
         icon: <KeySquare />,
     },
     {
         name: "Delete account",
-        link: "/profile/settings/delete-account",
+        link: "/profile/me/settings/delete-account",
         icon: <UserRoundX />,
     }
 ]

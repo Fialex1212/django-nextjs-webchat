@@ -6,8 +6,18 @@ from .serializers import NotificationSerializer
 class NotificationListView(APIView):
 
     def get(self, request):
-        # Get all unread notifications for the logged-in user
-        notifications = Notification.objects.filter(user=request.user, is_read=False)
-        # Serialize the notifications
+        username = request.headers.get("X-User-Name")
+        notifications = Notification.objects.filter(user__username=username, is_read=False)
         serializer = NotificationSerializer(notifications, many=True)
         return Response(serializer.data)
+
+class MarkAsReadView(APIView):
+    
+    def post(self, request, id):
+        try:
+            notification = Notification.objects.get(id=id, user=request.user)
+            notification.is_read = True
+            notification.save()
+            return Response({"detail": "Notification marked as read"})
+        except Notification.DoesNotExist:
+            return Response({"detail": "Notification not found"}, status=404)

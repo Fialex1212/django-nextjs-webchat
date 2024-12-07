@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
 import { Card, CardContent } from "../ui/card";
 import Link from "next/link";
-import useSearchStore from "@/store/useSearchStore";
+import useSearchStore from "@/stores/useSearchStore";
 
 const Search = () => {
   const searchParams = useSearchParams();

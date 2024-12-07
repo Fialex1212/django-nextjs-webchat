@@ -4,7 +4,7 @@ import axios from "axios";
 import Room from "./Room";
 import { useEffect, useState } from "react";
 import Tags from "./Tags";
-import { useRoomsStorage } from "@/store/useRoomsStorage";
+import { useRoomsStorage } from "@/stores/useRoomsStorage";
 import { Toaster } from "react-hot-toast";
 import Popup from "./CreateRoom/Popup";
 
@@ -26,8 +26,6 @@ const Rooms = () => {
       console.log(error);
     }
   };
-
-  console.log(rooms);
 
   useEffect(() => {
     getRooms();

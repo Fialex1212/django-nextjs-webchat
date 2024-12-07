@@ -1,14 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { useAuth } from "@/contexts/authContext";
-import { useUserData } from "@/contexts/userContext";
-import { useRouter } from "next/navigation";
 import { Card } from "../ui/card";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import axios from "axios";
-import { boolean } from "zod";
 
 const ProfileByName = ({ username }: { username: string }) => {
   const [userData, setUserData] = useState<{

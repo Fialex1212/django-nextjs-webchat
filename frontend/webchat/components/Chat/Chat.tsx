@@ -43,7 +43,7 @@ const Chat = ({ roomName }: { roomName: string }) => {
   });
 
   const onSubmit = (data: FormData) => {
-    if (data.message && socket) {
+    if (socket && data.message) {
       socket.send(
         JSON.stringify({
           message: data.message,
@@ -52,7 +52,7 @@ const Chat = ({ roomName }: { roomName: string }) => {
       );
       form.reset();
     }
-  };
+  };  
 
   const handleSendMessage = () => {
     if (message && socket) {
