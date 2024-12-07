@@ -11,17 +11,18 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toaster } from "react-hot-toast";
-import InviteLink from "./InviteLink";
-
-interface ChatRoomProps {
-  roomName: string;
-}
+import ChatInviteLink from "./ChatInviteLink";
+import ChatDontExists from "./ChatDontExists";
+import ChatLoading from "./ChatLoading";
+import ChatPopupPassword from "./ChatPopupPassword";
+import ChatMessages from "./ChatMessages";
 
 const formSchema = z.object({ message: z.string().max(500) });
 
 type FormData = z.infer<typeof formSchema>;
 
-const Chat: React.FC<ChatRoomProps> = ({ roomName }) => {
+const Chat = ({ roomName }: { roomName: string }) => {
+  //TODO add existing zustand store 
   const { username } = useUserData();
   const [message, setMessage] = useState<string>("");
   const [messages, setMessages] = useState<
@@ -135,18 +136,18 @@ const Chat: React.FC<ChatRoomProps> = ({ roomName }) => {
           body: JSON.stringify({ password }),
         }
       );
-  
+
       if (passwordCheckResponse.ok) {
         setRoomExists(true);
         setShowPasswordModal(false);
-  
+
         if (!socket || socket.readyState === WebSocket.CLOSED) {
           const ws = new WebSocket(`ws://localhost:8000/ws/chat/${roomName}/`);
-  
+
           ws.onopen = () => {
             console.log("Connected to WebSocket");
           };
-  
+
           ws.onmessage = (event: MessageEvent) => {
             const data = JSON.parse(event.data);
             setMessages((prevMessages) => [
@@ -154,11 +155,11 @@ const Chat: React.FC<ChatRoomProps> = ({ roomName }) => {
               { username: data.username, text: data.message },
             ]);
           };
-  
+
           ws.onclose = () => {
             console.log("Disconnected from WebSocket");
           };
-  
+
           setSocket(ws);
         }
       } else {
@@ -168,40 +169,13 @@ const Chat: React.FC<ChatRoomProps> = ({ roomName }) => {
       console.error("Error checking password:", error);
     }
   };
-  
-  
 
   if (loading === true) {
-    return (
-      <section>
-        <div className="container">
-          <Card className="py-1 px-1 flex-col gap-4 relative mb-4">
-            <CardContent>
-              <p className="text-center">Loading...</p>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-    );
+    return <ChatLoading />;
   }
 
   if (roomExists === false) {
-    return (
-      <section>
-        <div className="container">
-          <Card className="py-1 px-1 flex-col gap-4 relative mb-4">
-            <CardHeader>
-              <h2 className="text-[32px] text-center mb-4">Room Not Found</h2>
-            </CardHeader>
-            <CardContent>
-              <p className="text-center">
-                The room "{roomName}" does not exist.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-    );
+    return <ChatDontExists roomName={roomName} />;
   }
 
   return (
@@ -212,31 +186,11 @@ const Chat: React.FC<ChatRoomProps> = ({ roomName }) => {
           <CardHeader>
             <div className="w-full flex justify-center items-center gap-2 mb-4">
               <h2 className="text-[32px] text-center">{roomName}</h2>
-              <InviteLink roomName={roomName} />
+              <ChatInviteLink roomName={roomName} />
             </div>
           </CardHeader>
           <CardContent>
-            <ul>
-              {messages.map((msg, index) => (
-                <li key={index}>
-                  {msg.username === guestUsername ? (
-                    <div className="flex justify-end">
-                      <Card className="py-2 px-4 bg-blue-600 flex gap-1 text-white">
-                        {msg.text}
-                        <strong>:You</strong>
-                      </Card>
-                    </div>
-                  ) : (
-                    <div className="flex justify-start">
-                      <Card className="py-2 px-4 bg-slate-500 flex gap-1 text-white">
-                        <strong>{msg.username}:</strong>
-                        {msg.text}
-                      </Card>
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
+            <ChatMessages messages={messages} guestUsername={guestUsername} />
           </CardContent>
           <CardFooter className="flex items-center gap-4">
             <Form {...form} onSubmit={form.handleSubmit(onSubmit)}>
@@ -256,29 +210,12 @@ const Chat: React.FC<ChatRoomProps> = ({ roomName }) => {
               </Button>
             </Form>
           </CardFooter>
-          {showPasswordModal && (
-            <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
-              <div className="bg-white p-6 rounded shadow-md w-[300px]">
-                <h2 className="text-lg font-bold mb-4">Enter Password</h2>
-                <Input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Room Password"
-                  className="mb-4"
-                />
-                <div className="flex justify-end gap-2">
-                  <Button
-                    variant="secondary"
-                    onClick={() => setShowPasswordModal(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button onClick={handlePasswordSubmit}>Submit</Button>
-                </div>
-              </div>
-            </div>
-          )}
+          <ChatPopupPassword
+            showPasswordModal={showPasswordModal}
+            handlePasswordSubmit={handlePasswordSubmit}
+            password={password}
+            setPassword={setPassword}
+          />
         </Card>
       </div>
     </section>

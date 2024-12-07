@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { Button } from "../ui/button";
 import { Copy } from "lucide-react";
 
-const InviteLink = ({ roomName }: {roomName: string}) => {
+const ChatInviteLink = ({ roomName }: { roomName: string }) => {
   const inviteLink = `${window.location.protocol}//${window.location.host}/room/${roomName}`;
 
   const handleCopyLink = () => {
@@ -12,11 +12,12 @@ const InviteLink = ({ roomName }: {roomName: string}) => {
   };
   return (
     <>
-      <Button className="h-[40px]"  onClick={handleCopyLink}>
-        Invite link<Copy/>
+      <Button className="h-[40px] text-white" onClick={handleCopyLink}>
+        Invite link
+        <Copy />
       </Button>
     </>
   );
 };
 
-export default InviteLink;
+export default ChatInviteLink;
