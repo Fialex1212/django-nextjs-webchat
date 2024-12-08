@@ -13,6 +13,7 @@ from .models import (
     Message,
     Tag
 )
+from .consumers import active_connections, show_active_connections
 
 class RoomListCreatView(ListCreateAPIView):
     queryset = Room.objects.all()
@@ -62,3 +63,16 @@ class TagView(APIView):
         tags = Tag.objects.all()
         serializer = TagSerializer(tags, many=True)
         return Response(serializer.data)
+    
+class ActiveUsers(APIView):
+    def get(self, request):
+        username = request.user
+        active_users = show_active_connections(username)
+        return Response({"Active users": active_users})
+
+class CountActiveUsers(APIView):
+    def get(self, request):
+        active_users = show_active_connections()
+        count = len(active_users)
+        return Response({"Total active users": count})
+    

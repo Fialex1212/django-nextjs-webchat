@@ -7,6 +7,7 @@ import Searching from "./Searching";
 import User from "./User";
 import { ModeToggle } from "./ModeToggle";
 import ToggleBurger from "@/components/Header/Burger/ToggleBurger";
+import ActiveUsers from "./ActiveUsers";
 
 const Header = () => {
 
@@ -21,6 +22,7 @@ const Header = () => {
             >
               Logo
             </Link>
+             <ActiveUsers />
           </div>
           <div className="flex justify-center items-center gap-[20px]">
             <Searching />

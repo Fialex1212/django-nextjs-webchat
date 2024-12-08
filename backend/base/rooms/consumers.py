@@ -2,6 +2,8 @@ import json
 import re
 from channels.generic.websocket import AsyncWebsocketConsumer
 
+active_connections = set()
+
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         # Get room name from the URL parameters
@@ -17,10 +19,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
         # Accept WebSocket connection
+        active_connections.add(self)
         await self.accept()
 
     async def disconnect(self, close_code):
         # Leave room group
+        active_connections.remove(self)
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
@@ -65,3 +69,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'message': message,
             'username': username,
         }))
+        
+def show_active_connections(username = "Anonymous"):
+    connections_info = []
+    for conn in active_connections:
+        room_name = getattr(conn, 'room_name', 'unknown')
+        user = conn.scope.get('user', 'Anonymous')
+        client_info = conn.scope.get('client', ('unknown', 'unknown'))
+        connections_info.append(f"User: {username}, Room: {room_name}, IP: {client_info[0]}")
+    return connections_info
