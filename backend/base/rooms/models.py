@@ -14,7 +14,7 @@ class Room(models.Model):
     name = models.CharField(max_length=255, unique=True) # name of the room
     is_private = models.BooleanField(default=False) # if the room is private
     created_at = models.DateTimeField(auto_now_add=True) # when the room was created
-    created_by = models.ForeignKey(CustomUser, on_delete=models.SET_DEFAULT, null=True, default=1, related_name="created_rooms") # who created the room
+    created_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, default=1, related_name="created_rooms") # who created the room
     password = models.CharField(max_length=255, null=True, blank=True)
     tags = models.ManyToManyField("Tag", blank=True)
     

@@ -66,9 +66,9 @@ class TagView(APIView):
     
 class ActiveUsers(APIView):
     def get(self, request):
-        username = request.user
-        active_users = show_active_connections(username)
+        active_users = show_active_connections()
         return Response({"Active users": active_users})
+    
 
 class CountActiveUsers(APIView):
     def get(self, request):

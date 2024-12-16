@@ -1,12 +1,12 @@
+import random
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from .serializers import UserRegisterSerializer, UserSerializers, UserUpdateSerializers
+from .serializers import UserSerializers, UserUpdateSerializers
 from rest_framework import generics
-from .models import CustomUser
-from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import CustomTokenObtainPairSerializer
+from .models import CustomUser, EmailVerification
 from django.urls import reverse
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.mail import send_mail
@@ -14,18 +14,100 @@ from django.conf import settings
 from uuid import UUID
 from .utils import add_friend
 from django.contrib.auth import get_user_model
+from django.utils.timezone import now
+from datetime import timedelta
+from django.contrib.auth import authenticate, login, logout
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 token_generator = PasswordResetTokenGenerator()
 
-class UserRegisterView(APIView):
+class RegisterView(APIView):
     def post(self, request):
-        serializer = UserRegisterSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"Message": "User created successfully!"}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        username = request.data.get("username")
+        email = request.data.get("email")
+        password = request.data.get("password")
+        
+        if not username or not email or not password:
+            return Response({'error': 'Email and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        verification_code = random.randint(100000, 999999)
+        
+        EmailVerification.objects.update_or_create(
+            email=email,
+            defaults={
+                'code': verification_code,
+                'expires_at': now() + timedelta(minutes=3)
+            }
+        )
+        
+        send_mail(
+                'Verify your email',
+                f'Your verification code is {verification_code}',
+                settings.EMAIL_HOST_USER,
+                [email],
+                fail_silently=False,
+            )
+        
+        return Response({'message': 'Verification email sent. Please check your email.'}, status=status.HTTP_200_OK)
+
+class VerifyEmailView(APIView):
+    def post(self, request):
+        username = request.data.get("username")
+        email = request.data.get("email")
+        code = request.data.get("code")
+        
+        if not email or not code:
+            return Response({'error': 'Email and code are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            verification = EmailVerification.objects.get(email=email)
+        except EmailVerification.DoesNotExist:
+            return Response({'error': 'Verification code not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        if verification.is_expired():
+            return Response({'error': 'Verification code expired.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if verification.code != code:
+            return Response({'error': 'Invalid verification code.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        CustomUser.objects.create_user(email=email, username=username, password=request.data.get('password'))
+        verification.delete() 
+
+        return Response({'message': 'Email verified. User created successfully.'}, status=status.HTTP_201_CREATED)
+
+class LoginView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        user = authenticate(request, email=email, password=password)
+
+        if user is None:
+            return Response({'error': 'Invalid credentials.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        login(request, user)
+        
+        return Response({
+            'message': 'Login successful.',
+            'user': {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+            }
+        }, status=status.HTTP_200_OK)
+        
+@method_decorator(csrf_exempt, name='dispatch')
+class LogoutView(APIView):
+    def post(self, request):
+        if request.user.is_authenticated:
+            logout(request)
+            return Response({'message': 'Logout successful.'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'User is not authenticated.'}, status=status.HTTP_401_UNAUTHORIZED)
+
     
-class UserListCreateView(generics.ListCreateAPIView):
+class UserListView(generics.ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializers
     
@@ -41,11 +123,6 @@ class UserUpdateView(generics.UpdateAPIView):
     
     def get_object(self):
         return self.request.user
-
-class CustomTokenObtainPairView(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer
-    
-from django.urls import reverse
 
 class PasswordResetRequestView(APIView):
     def post(self, request):
@@ -125,6 +202,8 @@ class AddFriendView(APIView):
             return Response({"detail": "User not found"}, status=status.HTTP_404_NOT_FOUND)
         
         add_friend(requesting_user, target_user)
-
-        # Return a success response
         return Response({"detail": "Friend added successfully"}, status=status.HTTP_200_OK)
+    
+def delete_user(request, user_id):
+    user = get_object_or_404(CustomUser, id=user_id)
+    user.delete()

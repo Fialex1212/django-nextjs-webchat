@@ -4,27 +4,33 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from .views import (
-    UserRegisterView, 
-    UserListCreateView, 
+    UserListView, 
     UserDetailView, 
     UserUpdateView, 
-    CustomTokenObtainPairView,
     PasswordResetRequestView,
     PasswordResetConfirmView,
     UsernameChangeView,
-    AddFriendView
+    AddFriendView,
+    
+    RegisterView,
+    VerifyEmailView,
+    LoginView,
+    LogoutView,
+    delete_user
 )
 
 urlpatterns = [
     #Sign-up/Sign-in
-    path('login/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('register/', UserRegisterView.as_view(), name='register'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('register/', RegisterView.as_view(), name='register'),
+    path('register/verify/', VerifyEmailView.as_view(), name="verify_email"),
     
     #Users info
-    path('list/', UserListCreateView.as_view(), name='get_users'),
+    path('list/', UserListView.as_view(), name='get_users'),
     path('<str:username>/', UserDetailView.as_view(), name='get_user'),
     path('user/update/', UserUpdateView.as_view(), name='update_user'),
+    path('user/delete/<str:user_id>/', delete_user, name='delete_user'),
     
     #Reset password
     path('password-reset-request/', PasswordResetRequestView.as_view(), name='password_reset_request'),

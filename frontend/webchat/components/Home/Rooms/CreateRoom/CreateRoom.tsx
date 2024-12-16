@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import ListTags from "./ListTags"
+import ListTags from "./ListTags";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,9 +20,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useEffect, useState } from "react";
-import { useAuth } from "@/contexts/authContext";
-import { useUserData } from "@/contexts/userContext";
-import { log } from "console";
+import { useAuthStore } from "@/stores/useAtuhStore";
 
 interface TagData {
   id: string;
@@ -43,18 +41,15 @@ const CreateRoom = () => {
   const [selectedTags, setSelectedTags] = useState<TagData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [isPrivate, setIsPrivate] = useState(false);
-  const { id } = useUserData();
-  const { token } = useAuth();
+  const { isAuthenticated, user } = useAuthStore();
   const router = useRouter();
-
-  
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       is_private: false,
-      created_by: id ?? undefined,
+      created_by: user?.id | null,
       password: "",
       tags: [],
     },
@@ -62,10 +57,10 @@ const CreateRoom = () => {
 
   const onSubmit = async (data: FormData) => {
     console.log(selectedTags);
-    
+
     const formData = {
       ...data,
-      tags: selectedTags.map((tag) => tag.name), // You may adjust the field name if necessary
+      tags: selectedTags.map((tag) => tag.name),
     };
     console.log(formData);
     try {
@@ -88,16 +83,19 @@ const CreateRoom = () => {
     form.setValue("is_private", true);
     form.setValue("password", "password");
   };
-  
+
   useEffect(() => {
-    const checkToken = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-      if (!token) {
-        router.push("/auth/sign-in");
-      }
-    };
-    checkToken();
-  }, [router, token]);
+    if (isAuthenticated) {
+    } else {
+      toast(
+        "You need be authorizated for create your own room",
+        {
+          duration: 6000,
+        }
+      );
+      router.push("/auth/sign-in");
+    }
+  }, [isAuthenticated, router]);
 
   return (
     <div className="flex justify-center items-center">
@@ -125,7 +123,7 @@ const CreateRoom = () => {
                 control={form.control}
                 name="is_private"
                 render={({ field }) => (
-                  <FormItem className="flex items-center gap-2"> 
+                  <FormItem className="flex items-center gap-2">
                     <FormControl className="flex items-center">
                       <Checkbox
                         className="w-6 h-6 flex justify-center items-center"
@@ -163,12 +161,17 @@ const CreateRoom = () => {
                 />
               </div>
             )}
-            <ListTags selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
+            <ListTags
+              selectedTags={selectedTags}
+              setSelectedTags={setSelectedTags}
+            />
             <Button className="text-white" type="submit">
               Create a Room
             </Button>
             <p className="text-center">Or</p>
-            <Button className="text-white" onClick={inOneClick} type="submit">Create a room in one click</Button>
+            <Button className="text-white" onClick={inOneClick} type="submit">
+              Create a room in one click
+            </Button>
           </form>
         </Form>
       </div>

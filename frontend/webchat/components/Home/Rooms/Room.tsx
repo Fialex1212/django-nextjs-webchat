@@ -1,9 +1,9 @@
 import { Card, CardContent } from "@/components/ui//card";
 import { Button } from "@/components/ui//button";
 import Link from "next/link";
-import { Lock, Unlock, Calendar} from "lucide-react";
-import { useUserData } from "@/contexts/userContext";
+import { Lock, Unlock, Calendar } from "lucide-react";
 import RoomSettings from "./RoomSettings";
+import { useAuthStore } from "@/stores/useAtuhStore";
 
 interface TagData {
   id: string;
@@ -20,7 +20,8 @@ interface Room {
 }
 
 const Room: React.FC<{ room: Room }> = ({ room }) => {
-  const {id} = useUserData();
+  const { user } = useAuthStore();
+
   return (
     <Card>
       <CardContent className="px-6 py-4 h-full">
@@ -56,9 +57,7 @@ const Room: React.FC<{ room: Room }> = ({ room }) => {
                 Connect
               </Link>
             </Button>
-            {room.created_by === id && (
-              <RoomSettings name={room.name} />
-            )}
+            {room.created_by === user?.id && <RoomSettings name={room.name} />}
           </div>
         </li>
       </CardContent>

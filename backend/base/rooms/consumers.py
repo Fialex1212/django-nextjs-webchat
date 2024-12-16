@@ -70,11 +70,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'username': username,
         }))
         
-def show_active_connections(username = "Anonymous"):
+def show_active_connections(username="Anonymous"):
     connections_info = []
     for conn in active_connections:
         room_name = getattr(conn, 'room_name', 'unknown')
-        user = conn.scope.get('user', 'Anonymous')
         client_info = conn.scope.get('client', ('unknown', 'unknown'))
-        connections_info.append(f"User: {username}, Room: {room_name}, IP: {client_info[0]}")
+        connections_info.append({
+            "user": username,
+            "room": room_name,
+            "ip": client_info[0]
+        })
+    
     return connections_info

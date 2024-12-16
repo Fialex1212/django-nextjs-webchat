@@ -8,7 +8,6 @@ import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -16,7 +15,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -25,9 +23,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useEffect } from "react";
-import { useAuth } from "@/contexts/authContext";
-import { useUserData } from "@/contexts/userContext";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useAuthStore } from "@/stores/useAtuhStore";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email format"),
@@ -37,9 +35,8 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const SignIn = () => {
-  const {token, updateToken} = useAuth();
-  const { updateUserData } = useUserData();
   const router = useRouter();
+  const { login } = useAuthStore();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -52,10 +49,21 @@ const SignIn = () => {
   const onSubmit = async (data: FormData) => {
     console.log(data);
     try {
-      const response =  await axios.post("http://localhost:8000/api/users/login/", data);
-      const { access, user } = response.data;
-      updateToken(access);
-      updateUserData({ id: user.id, username: user.username, email: user.email });
+      const response = await axios.post(
+        "http://localhost:8000/api/users/login/",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      const { user } = response.data;
+      console.log("response: ", response.data);
+      if (user) {
+        login(user);
+      }
       toast.success("Successfully signed in.");
       router.push("/");
     } catch (error) {
@@ -63,12 +71,6 @@ const SignIn = () => {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    if (token) {
-      router.push("/");
-    }
-  }, [token, router]);
 
   return (
     <section className="flex h-[calc(100vh-300px)] justify-center items-center">
@@ -83,7 +85,10 @@ const SignIn = () => {
         <CardContent>
           <div className="grid gap-4">
             <Form {...form}>
-              <form className="grid gap-3" onSubmit={form.handleSubmit(onSubmit)}>
+              <form
+                className="grid gap-3"
+                onSubmit={form.handleSubmit(onSubmit)}
+              >
                 <div className="grid gap-2">
                   <FormField
                     control={form.control}
@@ -107,7 +112,11 @@ const SignIn = () => {
                       <FormItem>
                         <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input type="password" placeholder="Password" {...field} />
+                          <Input
+                            type="password"
+                            placeholder="Password"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
