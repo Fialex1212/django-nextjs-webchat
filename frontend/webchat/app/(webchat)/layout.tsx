@@ -1,24 +1,21 @@
 "use client";
 
-import Burger from "@/components/Header/Burger/Burger";
-import Footer from "@/components/Footer/Footer";
-import Header from "@/components/Header/Header";
-import useBurgerStore from "@/stores/useBurgerStore";
-import { useState } from "react";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import { Toaster } from "sonner";
 
 export default function WebchatLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { isOpen } = useBurgerStore();
   return (
     <html lang="en">
       <body>
+        <Toaster position="top-center" richColors />
         <Header />
-        {children}
+        <main className="container min-h-[calc(100vh-268px)]"> {children}</main>
         <Footer />
-        {isOpen && <Burger />}
       </body>
     </html>
   );
