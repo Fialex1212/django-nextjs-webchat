@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import Searching from "./Searching";
 import { ModeToggle } from "./ModeToggle";
-import { Accessibility } from "lucide-react";
 
 const Header = () => {
   return (
@@ -18,7 +17,6 @@ const Header = () => {
             >
               Anonymous Chat
             </Link>
-            <Accessibility />
           </div>
           <div className="flex justify-center items-center gap-[20px]">
             <Searching />

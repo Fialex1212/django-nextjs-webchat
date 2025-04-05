@@ -5,13 +5,10 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import { Input } from "../ui/input";
+import { normalizeRoomName } from "@/utils/noralizeRoomName";
 
 const CreateRoom = () => {
   const [roomName, setRoomName] = useState("");
-
-  const normalizeRoomName = (name: string) => {
-    return name.replace(/[^a-zA-Z0-9._-]/g, "_");
-  };
 
   return (
     <div>

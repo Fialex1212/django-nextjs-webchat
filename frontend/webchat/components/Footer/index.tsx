@@ -1,7 +1,6 @@
 import React from "react";
 import { Card } from "../ui/card";
 import Link from "next/link";
-import { Accessibility } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -15,7 +14,6 @@ const Footer = () => {
             >
               Anonymous Chat
             </Link>
-            <Accessibility />
           </div>
         </Card>
       </div>

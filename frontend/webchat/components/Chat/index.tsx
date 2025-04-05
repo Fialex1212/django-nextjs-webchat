@@ -5,25 +5,9 @@ import { Button } from "../ui/button";
 import { Link, Send } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "../ui/input";
+import { Message, WebSocketData } from "@/utils/types";
 
-interface Message {
-  user_id: string;
-  content: string;
-}
-
-interface WebSocketData {
-  type: "history" | "message" | "connection_established" | "error";
-  user_id?: string;
-  room_id?: string;
-  message?: string;
-  messages?: Message[];
-}
-
-interface ChatProps {
-  roomName: string;
-}
-
-export default function Chat({ roomName }: ChatProps) {
+export default function Chat({ roomName }: { roomName: string }) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [socket, setSocket] = useState<WebSocket | null>(null);
@@ -102,16 +86,35 @@ export default function Chat({ roomName }: ChatProps) {
       </div>
 
       <ul
-        className="overflow-y-auto flex-1"
+        className="overflow-y-auto flex-1 flex flex-col gap-2"
         style={{ maxHeight: "calc(100vh - 500px)" }}
       >
         {messages.map((msg, index) => (
-          <div key={index}>
-            <strong>
-              {msg.user_id === currentUserId ? `${msg.user_id} (me)` : msg.user_id}
-            </strong>
-            : {msg.content}
-          </div>
+          <li
+            key={index}
+            className={`flex ${
+              msg.user_id === currentUserId
+                ? "items-end justify-end"
+                : "items-start justify-start"
+            }`}
+          >
+            <div
+              className="max-w-[70%] p-2 rounded text-white"
+              style={{
+                backgroundColor: "hsl(var(--primary))",
+              }}
+            >
+              {msg.user_id === currentUserId ? (
+                <>
+                  {msg.content} : <strong>{msg.user_id} (me)</strong>
+                </>
+              ) : (
+                <>
+                  <strong>{msg.user_id}</strong>: {msg.content}
+                </>
+              )}
+            </div>
+          </li>
         ))}
       </ul>
 
