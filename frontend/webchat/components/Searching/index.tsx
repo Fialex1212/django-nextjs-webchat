@@ -6,6 +6,7 @@ import { Card, CardContent } from "../ui/card";
 import Link from "next/link";
 import { useRoomsStore } from "@/store/useRoomsStore";
 import { normalizeRoomName } from "@/utils/noralizeRoomName";
+import Room from "../Room";
 
 const Search = () => {
   const searchParams = useSearchParams();
@@ -73,13 +74,7 @@ const Search = () => {
           <ul className="results__list flex flex-col gap-3">
             {results.map((room) => (
               <li key={room}>
-                <Link href={`/room/${room}`}>
-                  <Card className="flex items-center">
-                    <CardContent className="py-4 text-[20px]">
-                      {room}
-                    </CardContent>
-                  </Card>
-                </Link>
+                <Room room={room} />
               </li>
             ))}
           </ul>

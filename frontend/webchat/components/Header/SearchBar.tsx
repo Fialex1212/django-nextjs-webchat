@@ -4,7 +4,7 @@ import { Input } from "../ui/input";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const Searching = () => {
+const SearchBar = () => {
   const [search, setSearch] = useState("");
   const router = useRouter();
 
@@ -16,12 +16,12 @@ const Searching = () => {
   };
 
   return (
-    <div className="invisible sm:visible w-0 sm:w-fit">
+    <div>
       <form onSubmit={handleSubmit}>
         <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-[280px] h-[40px]"
+          className="w-full h-[40px]"
           placeholder="Search..."
         />
       </form>
@@ -29,4 +29,4 @@ const Searching = () => {
   );
 };
 
-export default Searching;
+export default SearchBar;

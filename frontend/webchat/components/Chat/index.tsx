@@ -79,7 +79,9 @@ export default function Chat({ roomName }: { roomName: string }) {
   return (
     <div className="min-h-[calc(100vh-300px)] flex flex-col justify-between">
       <div className="flex justify-center items-center gap-8">
-        <h2 className="text-center text-[48px]">Chat: {roomName}</h2>
+        <h2 className="text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
+          Chat: {roomName}
+        </h2>
         <Button className="flex justify-center items-center" onClick={copyLink}>
           <Link color="white"></Link>
         </Button>
