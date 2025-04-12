@@ -1,5 +1,5 @@
 from pathlib import Path
-from datetime import timedelta
+# import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -57,6 +57,21 @@ TEMPLATES = [
     },
 ]
 
+# DATABASE
+
+# PostgreSQL
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": os.environ.get("POSTGRES_DB"),
+#         "USER": os.environ.get("POSTGRES_USER"),
+#         "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+#         "HOST": "db",
+#         "PORT": "5432"
+#     }
+# }
+
+#SQLite
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",

@@ -1,0 +1,32 @@
+services:
+  backend:
+    build:
+      context: ./backend/base
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    container_name: django-backend
+    volumes:
+      - ./backend/base:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    entrypoint: ["/app/entrypoint.sh"]
+
+  frontend:
+    build:
+      context: ./frontend/webchat
+      dockerfile: Dockerfile
+    command: sh -c "yarn build && yarn start"
+    container_name: nextjs-frontend
+    volumes:
+      - ./frontend/webchat:/app
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
