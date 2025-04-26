@@ -19,5 +19,5 @@ else:
     print("Superuser already exists.")
 EOF
 
-# Now run the command passed into the container
+# Use command into docker-compose
 exec "$@"

@@ -77,65 +77,70 @@ export default function Chat({ roomName }: { roomName: string }) {
   };
 
   return (
-    <div className="min-h-[calc(100vh-300px)] flex flex-col justify-between">
-      <div className="flex justify-center items-center gap-8">
-        <h2 className="text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
-          Chat: {roomName}
-        </h2>
-        <Button className="flex justify-center items-center" onClick={copyLink}>
-          <Link color="white"></Link>
-        </Button>
-      </div>
-
-      <ul
-        className="overflow-y-auto flex-1 flex flex-col gap-2"
-        style={{ maxHeight: "calc(100vh - 500px)" }}
-      >
-        {messages.map((msg, index) => (
-          <li
-            key={index}
-            className={`flex ${
-              msg.user_id === currentUserId
-                ? "items-end justify-end"
-                : "items-start justify-start"
-            }`}
+    <>
+      <div className="min-h-[calc(100vh-280px)] flex flex-col justify-between">
+        <div className="flex justify-center items-center gap-8">
+          <h2 className="text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
+            Chat: {roomName}
+          </h2>
+          <Button
+            className="flex justify-center items-center"
+            onClick={copyLink}
           >
-            <div
-              className="max-w-[70%] p-2 rounded text-white"
-              style={{
-                backgroundColor: "hsl(var(--primary))",
-              }}
-            >
-              {msg.user_id === currentUserId ? (
-                <>
-                  {msg.content} : <strong>{msg.user_id} (me)</strong>
-                </>
-              ) : (
-                <>
-                  <strong>{msg.user_id}</strong>: {msg.content}
-                </>
-              )}
-            </div>
-          </li>
-        ))}
-      </ul>
+            <Link color="white"></Link>
+          </Button>
+        </div>
 
-      <form onSubmit={handleSubmit} className="mt-4 flex gap-2">
-        <Input
-          name="message"
-          value={message}
-          placeholder="Type a message..."
-          onChange={(e) => setMessage(e.target.value)}
-        />
-        <Button
-          className="text-white flex gap-2"
-          type="submit"
-          disabled={!message.trim()}
+        <ul
+          className="overflow-y-auto flex-1 flex flex-col gap-2"
+          style={{ maxHeight: "calc(100vh - 500px)" }}
         >
-          <Send />
-          Send
-        </Button>
-      </form>
-    </div>
+          {messages.map((msg, index) => (
+            <li
+              key={index}
+              className={`flex ${
+                msg.user_id === currentUserId
+                  ? "items-end justify-end"
+                  : "items-start justify-start"
+              }`}
+            >
+              <div
+                className="max-w-[70%] p-2 rounded text-white break-words"
+                style={{
+                  backgroundColor: "hsl(var(--primary))",
+                }}
+              >
+                {msg.user_id === currentUserId ? (
+                  <>
+                    {msg.content} : <strong>{msg.user_id} (me)</strong>
+                  </>
+                ) : (
+                  <>
+                    <strong>{msg.user_id}</strong>: {msg.content}
+                  </>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        <form onSubmit={handleSubmit} className="mt-4 flex gap-2">
+          <Input
+            name="message"
+            value={message}
+            placeholder="Type a message..."
+            onChange={(e) => setMessage(e.target.value)}
+          />
+          <Button
+            className="text-white flex gap-2"
+            type="submit"
+            disabled={!message.trim()}
+          >
+            <Send />
+            Send
+          </Button>
+        </form>
+      </div>
+    </>
   );
 }
