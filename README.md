@@ -1,6 +1,6 @@
 # **Django & Next.js Webchat**
 
-The Django & Next.js Blog is a modern platform built with Django for the backend and Next.js for the frontend. It allows users to register, log in, and manage their profiles, create and interact with blog posts, and engage with others through comments and likes. Featuring advanced search and filtering options, a responsive design, the platform delivers a seamless and secure experience. Built using React, Tailwind CSS, Django REST Framework, and PostgreSQL, it ensures both performance and scalability. Authentication is secured via JSON Web Tokens (JWT).
+The Django & Next.js Webchat is a cutting-edge real-time messaging platform that combines the power of Django for backend functionality with Next.js for a dynamic frontend experience. Designed for seamless communication, it offers one-on-one and group chats with WebSocket support, advanced message search, and effortless room sharing.
 
 
 ## **Goal**
