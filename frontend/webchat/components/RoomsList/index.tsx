@@ -5,11 +5,11 @@ import Room from "../Room";
 import { useEffect } from "react";
 
 const Rooms = () => {
-  const { rooms, loading, error, setRooms, setLoading, setError } =
+  const { rooms, loading, setRooms, setLoading, setError } =
     useRoomsStore();
 
   useEffect(() => {
-    const socket = new WebSocket("ws://127.0.0.1:8000/ws/room_list/");
+    const socket = new WebSocket("wss://127.0.0.1:8000/api/ws/room_list/");
 
     socket.onopen = () => {
       console.log("WebScoket connected");

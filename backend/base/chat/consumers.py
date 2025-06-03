@@ -38,7 +38,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             del ACTIVE_ROOMS[self.room_id]
 
     async def receive(self, text_data):
-        if not text_data:  # Проверяем, не пустые ли данные
+        if not text_data:
             await self.send(
                 text_data=json.dumps(
                     {"type": "error", "message": "Empty message received"}
@@ -47,8 +47,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return
 
         try:
-            text_data_json = json.loads(text_data)  # Пытаемся распарсить JSON
-            message = text_data_json.get("message")  # Безопасно извлекаем 'message'
+            text_data_json = json.loads(text_data)
+            message = text_data_json.get("message")
             if not message:
                 await self.send(
                     text_data=json.dumps(
@@ -57,7 +57,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 )
                 return
 
-            # Отправляем сообщение в группу
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {"type": "chat_message", "message": message, "user_id": self.user_id},

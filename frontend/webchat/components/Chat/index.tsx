@@ -16,7 +16,7 @@ export default function Chat({ roomName }: { roomName: string }) {
   useEffect(() => {
     if (!roomName) return;
 
-    const ws = new WebSocket(`ws://localhost:8000/ws/chat/${roomName}/`);
+    const ws = new WebSocket(`wss://localhost:8000/api/ws/chat/${roomName}/`);
     setSocket(ws);
 
     ws.onmessage = (event: MessageEvent) => {

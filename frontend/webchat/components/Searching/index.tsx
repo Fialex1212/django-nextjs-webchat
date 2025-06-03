@@ -2,8 +2,6 @@
 
 import { useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
-import { Card, CardContent } from "../ui/card";
-import Link from "next/link";
 import { useRoomsStore } from "@/store/useRoomsStore";
 import { normalizeRoomName } from "@/utils/noralizeRoomName";
 import Room from "../Room";
@@ -11,14 +9,26 @@ import Room from "../Room";
 const Search = () => {
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("q") || "";
-  const query = useRoomsStore((state) => state.query);
-  const setQuery = useRoomsStore((state) => state.setQuery);
-  const loading = useRoomsStore((state) => state.loading);
-  const error = useRoomsStore((state) => state.error);
-  const rooms = useRoomsStore((state) => state.rooms);
-  const setRooms = useRoomsStore((state) => state.setRooms);
-  const setLoading = useRoomsStore((state) => state.setLoading);
-  const setError = useRoomsStore((state) => state.setError);
+  const {
+    query,
+    setQuery,
+    loading,
+    error,
+    rooms,
+    setRooms,
+    setLoading,
+    setError,
+  } = useRoomsStore((state) => ({
+    query: state.query,
+    setQuery: state.setQuery,
+    loading: state.loading,
+    error: state.error,
+    rooms: state.rooms,
+    setRooms: state.setRooms,
+    setLoading: state.setLoading,
+    setError: state.setError,
+  }));
+
   const results = React.useMemo(() => {
     return rooms.filter((room) =>
       room.toLowerCase().includes(query.toLowerCase())
@@ -26,7 +36,7 @@ const Search = () => {
   }, [rooms, query]);
 
   useEffect(() => {
-    const socket = new WebSocket("ws://127.0.0.1:8000/ws/room_list/");
+    const socket = new WebSocket("wss://127.0.0.1:8000/api/ws/room_list/");
 
     socket.onopen = () => {
       console.log("WebScoket connected");

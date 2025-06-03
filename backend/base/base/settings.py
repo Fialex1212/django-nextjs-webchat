@@ -1,4 +1,5 @@
 from pathlib import Path
+
 # import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,13 +21,20 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # apps
+]
+
+# apps
+INSTALLED_APPS += [
     "chat",
-    # libraries
+]
+
+# libraries
+INSTALLED_APPS += [
     "rest_framework",
     "corsheaders",
     "channels",
 ]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -71,7 +79,7 @@ TEMPLATES = [
 #     }
 # }
 
-#SQLite
+# SQLite
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -117,6 +125,12 @@ WSGI_APPLICATION = "base.wsgi.application"
 # CHANNEL_LAYERS
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer", #TODO change to redis
+        "BACKEND": "channels.layers.InMemoryChannelLayer",  # TODO change to redis
     },
 }
+
+# SSL
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_SSL_REDIRECT = True  # usually for production
+CSRF_COOKIE_SECURE = True  # Only send CSRF cookies over HTTPS
+SESSION_COOKIE_SECURE = True
